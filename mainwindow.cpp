@@ -7,21 +7,21 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    QGridLayout *grid = new QGridLayout();
-    rocker = new Rocker(this);
-    grid->addWidget(rocker);
-
+    QWidget *centralWidget = new QWidget(this);
+    centralWidget->setMinimumHeight(2 * 48);
+    centralWidget->setMaximumHeight(2 * 48);
     QVBoxLayout *mainLayout = new QVBoxLayout();
-    mainLayout->addLayout(grid);
-    setLayout(mainLayout);
+    rockers = new RockerMatrix(2);
+    mainLayout->addLayout(rockers);
+    centralWidget->setLayout(mainLayout);
     setWindowTitle("Colobock demo");
 
-    connect(rocker, &Rocker::clicked, this, &MainWindow::clicked);
+    connect(rockers, &RockerMatrix::clickedSignal, this, &MainWindow::clicked);
 }
 
-void MainWindow::clicked()
+void MainWindow::clicked(int x, int y)
 {
-    qDebug() << "Button clicked";
+    qDebug() << "Button (" << x << ", " << y << ") clicked";
 }
 
 MainWindow::~MainWindow()

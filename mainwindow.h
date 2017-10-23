@@ -2,16 +2,16 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "rocker.h"
+#include "rockermatrix.h"
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
-    Rocker * rocker;
+    RockerMatrix * rockers;
 
 private slots:
-    void clicked();
+    void clicked(int x, int y);
 
 public:
     MainWindow(QWidget *parent = 0);

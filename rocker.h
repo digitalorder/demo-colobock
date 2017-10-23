@@ -12,12 +12,18 @@ class Rocker : public QPushButton
     };
 
     State state;
+    const int x;
+    const int y;
 
     QString stateToText();
+private slots:
+    void clickedEventCatcher(bool);
+
 public:
-    explicit Rocker(QWidget *parent = 0);
+    explicit Rocker(int x, int y, QWidget *parent = 0);
 
 signals:
+    void clickedOverride(int x, int y);
 
 public slots:
 };
