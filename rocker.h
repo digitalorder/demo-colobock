@@ -18,6 +18,7 @@ class Rocker : public QPushButton
     QString stateToText();
 private slots:
     void clickedEventCatcher(bool);
+    void toggledEventCatcher(bool);
 
 public:
     explicit Rocker(int x, int y, QWidget *parent = 0);

@@ -3,15 +3,14 @@
 
 #include <QMainWindow>
 #include "rockermatrix.h"
+#include "switchlogic.h"
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
-    RockerMatrix * rockers;
-
-private slots:
-    void clicked(int x, int y);
+    RockerMatrix * _rockers;
+    SwitchLogic * _logic;
 
 public:
     MainWindow(QWidget *parent = 0);

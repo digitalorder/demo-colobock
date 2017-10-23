@@ -26,8 +26,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += main.cpp\
         mainwindow.cpp \
     rocker.cpp \
-    rockermatrix.cpp
+    rockermatrix.cpp \
+    switchlogic.cpp
 
 HEADERS  += mainwindow.h \
     rocker.h \
-    rockermatrix.h
+    rockermatrix.h \
+    switchlogic.h
