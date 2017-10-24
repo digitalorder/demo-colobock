@@ -9,6 +9,19 @@ void RockersMatrix::clicked(int x, int y)
     emit clickedSignal(x, y);
 }
 
+Rocker::State RockersMatrix::generateRockerState()
+{
+    int randomState = qrand() % 2;
+    if (randomState)
+    {
+        return Rocker::VERTICAL;
+    }
+    else
+    {
+        return Rocker::HORIZONTAL;
+    }
+}
+
 RockersMatrix::RockersMatrix(int size, QWidget *parent) : QGridLayout(parent)
 {
     this->_size = size;
@@ -19,17 +32,7 @@ RockersMatrix::RockersMatrix(int size, QWidget *parent) : QGridLayout(parent)
         setColumnMinimumWidth(x, 32);
         for (int y = 0; y < size; y++)
         {
-            int randomState = qrand() % 2;
-            Rocker::State rockerState;
-            if (randomState)
-            {
-                rockerState = Rocker::VERTICAL;
-            }
-            else
-            {
-                rockerState = Rocker::HORIZONTAL;
-            }
-            Rocker * rocker = new Rocker(x, y, rockerState);
+            Rocker * rocker = new Rocker(x, y, generateRockerState());
             addWidget(rocker, x, y);
             _rockerMap.append(rocker);
             connect(rocker, &Rocker::clickedOverride, this, &RockersMatrix::clicked);
@@ -52,5 +55,13 @@ void RockersMatrix::toggleRocker(int x, int y)
 Rocker::State RockersMatrix::rockerState(int x, int y)
 {
     return getRocker(x, y)->getState();
+}
+
+void RockersMatrix::shuffle()
+{
+    for (auto r = _rockerMap.begin(); r != _rockerMap.end(); ++r)
+    {
+        (*r)->setState(generateRockerState());
+    }
 }
 

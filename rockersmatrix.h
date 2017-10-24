@@ -12,6 +12,7 @@ class RockersMatrix : public QGridLayout
     int _size;
     QVector<Rocker *> _rockerMap;
     Rocker * getRocker(int x, int y);
+    Rocker::State generateRockerState();
 
 private slots:
     void clicked(int x, int y);
@@ -22,6 +23,7 @@ public:
     int size() { return _size; }
     void toggleRocker(int x, int y);
     Rocker::State rockerState(int x, int y);
+    void shuffle();
 
 signals:
     void clickedSignal(int x, int y);

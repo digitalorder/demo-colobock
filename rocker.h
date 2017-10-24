@@ -24,8 +24,6 @@ public:
     explicit Rocker(int x, int y, State state, QWidget *parent = 0);
     Rocker::State getState();
     void toggleState();
-
-private:
     void setState(State state);
 
 signals:

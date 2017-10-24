@@ -22,6 +22,12 @@ void Logger::updateMoveCounter()
     emit moveCounterChanged(_move_counter);
 }
 
+void Logger::resetMoveCounter()
+{
+    _move_counter = 0;
+    emit moveCounterChanged(_move_counter);
+}
+
 void Logger::newUserAction(int x, int y)
 {
     updateMoveCounter();
@@ -50,4 +56,13 @@ void Logger::undoLastUserAction()
     emit undoAvailablityChanged(!_move_history.empty());
     emit redoAvailablityChanged(!_undo_history.empty());
     emit revertAction(a.x(), a.y());
+}
+
+void Logger::newGameAction(int matrixSize)
+{
+    resetMoveCounter();
+    _undo_history.clear();
+    _move_history.clear();
+    emit undoAvailablityChanged(!_move_history.empty());
+    emit redoAvailablityChanged(!_undo_history.empty());
 }

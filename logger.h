@@ -26,6 +26,7 @@ class Logger : public QObject
     QVector<UserAction> _undo_history;
     int _move_counter;
     void updateMoveCounter();
+    void resetMoveCounter();
 
 public:
     explicit Logger(QObject *parent = 0);
@@ -40,6 +41,7 @@ public slots:
     void newUserAction(int x, int y);
     void redoLastUserAction();
     void undoLastUserAction();
+    void newGameAction(int matrixSize);
 
     friend std::ostream& operator<<(std::ostream& os, const Logger& l);
 };

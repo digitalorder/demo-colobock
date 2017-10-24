@@ -4,13 +4,13 @@
 #include <QGridLayout>
 #include <QDebug>
 #include <QSpacerItem>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
+    : QMainWindow(parent), _matrix_size(4)
 {
-    int matrixSize = 4;
-    _locks = new LocksArray(matrixSize);
-    _rockers = new RockersMatrix(matrixSize);
+    _locks = new LocksArray(_matrix_size);
+    _rockers = new RockersMatrix(_matrix_size);
     _btn_undo = new QPushButton(QString("<-"), this);
     _btn_undo->setMaximumWidth(32);
     _btn_undo->setEnabled(false);
@@ -35,14 +35,14 @@ MainWindow::MainWindow(QWidget *parent)
     buttonsLayout->addWidget(_btn_new_game);
 
     QHBoxLayout *locksLayout = new QHBoxLayout();
-    locksLayout->addSpacerItem(new QSpacerItem(12, 0, QSizePolicy::Expanding));
+    locksLayout->addSpacerItem(new QSpacerItem(2, 0, QSizePolicy::Expanding));
     locksLayout->addLayout(_locks);
-    locksLayout->addSpacerItem(new QSpacerItem(12, 0, QSizePolicy::Expanding));
+    locksLayout->addSpacerItem(new QSpacerItem(2, 0, QSizePolicy::Expanding));
 
     QHBoxLayout *rockersLayout = new QHBoxLayout();
-    rockersLayout->addSpacerItem(new QSpacerItem(1, 0, QSizePolicy::Expanding));
+    rockersLayout->addSpacerItem(new QSpacerItem(2, 0, QSizePolicy::Expanding));
     rockersLayout->addLayout(_rockers);
-    rockersLayout->addSpacerItem(new QSpacerItem(1, 0, QSizePolicy::Expanding));
+    rockersLayout->addSpacerItem(new QSpacerItem(2, 0, QSizePolicy::Expanding));
 
     QVBoxLayout *mainLayout = new QVBoxLayout();
     mainLayout->addLayout(buttonsLayout);
@@ -52,7 +52,7 @@ MainWindow::MainWindow(QWidget *parent)
     QWidget *centralWidget = new QWidget(this);
     centralWidget->setLayout(mainLayout);
     // todo remove this dependency
-    centralWidget->setGeometry(0, 0, (matrixSize + 1) * 48, (matrixSize + 2) * 48);
+    centralWidget->setGeometry(0, 0, (_matrix_size + 1) * 48, (_matrix_size + 2) * 48);
     QPalette pal = palette();
 
     // set black background
@@ -75,6 +75,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(_logger, &Logger::undoAvailablityChanged, _btn_undo, &QPushButton::setEnabled);
     connect(_logger, &Logger::redoAvailablityChanged, _btn_redo, &QPushButton::setEnabled);
     connect(_logger, &Logger::moveCounterChanged, this, &MainWindow::moveCounterChanged);
+    connect(this, &MainWindow::restartRequested, _logger, &Logger::newGameAction);
+    connect(this, &MainWindow::restartRequested, _rockers_logic, &RockersLogic::newGameAction);
+    connect(_btn_new_game, &QPushButton::clicked, this, &MainWindow::newGameRequested);
 
     _rockers_logic->emitNewRockersStateSignal();
 }
@@ -86,10 +89,29 @@ MainWindow::~MainWindow()
 
 void MainWindow::winCatcher()
 {
-    qDebug() << "Game is completed now!";
+    QMessageBox msgBox;
+    msgBox.setText("Cool! You was able to solve this puzzle. Would you like to try again?");
+    QAbstractButton* pButtonYes = msgBox.addButton("Wanna more!", QMessageBox::YesRole);
+    msgBox.addButton("Quit!", QMessageBox::NoRole);
+
+    msgBox.exec();
+
+    if (msgBox.clickedButton()==pButtonYes)
+    {
+        emit restartRequested(_matrix_size);
+    }
+    else
+    {
+        close();
+    }
 }
 
 void MainWindow::moveCounterChanged(int value)
 {
     _lbl_move_counter->setText(QString("Moves: %1").arg(value));
+}
+
+void MainWindow::newGameRequested()
+{
+    emit restartRequested(_matrix_size);
 }

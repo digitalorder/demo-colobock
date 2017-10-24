@@ -73,3 +73,12 @@ void RockersLogic::revertAction(int x, int y)
     _matrix->toggleRocker(x, y);
     emitNewRockersStateSignal();
 }
+
+void RockersLogic::newGameAction(int matrixSize)
+{
+    if (matrixSize == _matrix->size())
+    {
+        _matrix->shuffle();
+        emitNewRockersStateSignal();
+    }
+}
