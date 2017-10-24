@@ -29,7 +29,7 @@ private:
     void setState(State state);
 
 signals:
-    void clickedOverride(int _x, int _y);
+    void clickedOverride(int x, int y);
 
 public slots:
 };

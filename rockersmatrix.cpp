@@ -39,7 +39,7 @@ RockersMatrix::RockersMatrix(int size, QWidget *parent) : QGridLayout(parent)
 
 Rocker * RockersMatrix::getRocker(int x, int y)
 {
-    int index = x + y * _size;
+    int index = x * _size + y;
     Q_ASSERT(index < _rockerMap.size());
     return _rockerMap[index];
 }

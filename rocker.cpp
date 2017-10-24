@@ -52,6 +52,8 @@ Rocker::Rocker(int x, int y, State state, QWidget *parent) : QPushButton(parent)
 {
     setMaximumHeight(32);
     setMaximumWidth(32);
+    setMinimumHeight(32);
+    setMinimumWidth(32);
     setCheckable(true);
     setState(state);
 

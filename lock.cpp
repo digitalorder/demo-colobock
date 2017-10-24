@@ -4,6 +4,8 @@ Lock::Lock(int x, QWidget *parent) : QPushButton(parent), _x(x)
 {
     setEnabled(false);
     setText("?");
+    setMaximumHeight(32);
+    setMaximumWidth(16);
 }
 
 void Lock::setState(Lock::State state)

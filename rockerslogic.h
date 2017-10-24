@@ -12,6 +12,7 @@ class RockersLogic : public QObject
     RockersState getState();
 public:
     explicit RockersLogic(RockersMatrix *matrix, QWidget * parent = 0);
+    void emitNewRockersStateSignal();
 
 signals:
     void newRockersStateSignal(RockersState state);

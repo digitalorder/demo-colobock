@@ -17,6 +17,9 @@ class MainWindow : public QMainWindow
     LocksArray * _locks;
     LocksLogic * _locks_logic;
     WinLogic * _win_logic;
+    QPushButton * _btn_undo;
+    QPushButton * _btn_redo;
+    QPushButton * _btn_new_game;
 
 public:
     MainWindow(QWidget *parent = 0);
