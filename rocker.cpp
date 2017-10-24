@@ -2,7 +2,7 @@
 
 QString Rocker::stateToText()
 {
-    if (state == Rocker::HORIZONTAL)
+    if (isChecked())
     {
         return QString("|");
     }
@@ -14,7 +14,7 @@ QString Rocker::stateToText()
 
 void Rocker::clickedEventCatcher(bool)
 {
-    emit clickedOverride(x, y);
+    emit clickedOverride(_x, _y);
 }
 
 void Rocker::toggledEventCatcher(bool checked)
@@ -29,12 +29,14 @@ void Rocker::toggledEventCatcher(bool checked)
     }
 }
 
-Rocker::Rocker(int x, int y, QWidget *parent) : QPushButton(parent), x(x), y(y)
+Rocker::Rocker(int x, int y, bool state, QWidget *parent) : QPushButton(parent), _x(x), _y(y)
 {
     setMaximumHeight(32);
     setMaximumWidth(32);
     setText(stateToText());
     setCheckable(true);
+    setChecked(state);
+    toggledEventCatcher(state);
 
     connect(this, &Rocker::clicked, this, &Rocker::clickedEventCatcher);
     connect(this, &Rocker::toggled, this, &Rocker::toggledEventCatcher);

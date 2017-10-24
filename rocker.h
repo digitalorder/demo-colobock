@@ -6,14 +6,8 @@
 class Rocker : public QPushButton
 {
     Q_OBJECT
-    enum State {
-        VERTICAL,
-        HORIZONTAL
-    };
-
-    State state;
-    const int x;
-    const int y;
+    const int _x;
+    const int _y;
 
     QString stateToText();
 private slots:
@@ -21,10 +15,10 @@ private slots:
     void toggledEventCatcher(bool);
 
 public:
-    explicit Rocker(int x, int y, QWidget *parent = 0);
+    explicit Rocker(int x, int y, bool state, QWidget *parent = 0);
 
 signals:
-    void clickedOverride(int x, int y);
+    void clickedOverride(int _x, int _y);
 
 public slots:
 };

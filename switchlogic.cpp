@@ -4,6 +4,22 @@
 SwitchLogic::SwitchLogic(RockerMatrix *matrix, QWidget *parent) : QObject(parent)
 {
     _matrix = matrix;
+    SwitchesState s = getState();
+    emit newSwitchesState(s);
+}
+
+SwitchesState SwitchLogic::getState()
+{
+    SwitchesState state(_matrix->size());
+    for (int x = 0; x < _matrix->size(); x++)
+    {
+        for (int y = 0; y < _matrix->size(); y++)
+        {
+            state.assign(x, y, _matrix->rockerState(x, y));
+        }
+    }
+
+    return state;
 }
 
 void SwitchLogic::rockerSwitched(int x, int y)
@@ -20,4 +36,7 @@ void SwitchLogic::rockerSwitched(int x, int y)
             _matrix->toggleRocker(x, i);
         }
     }
+
+    SwitchesState s = getState();
+    emit newSwitchesState(s);
 }

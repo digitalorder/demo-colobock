@@ -19,7 +19,8 @@ RockerMatrix::RockerMatrix(int size, QWidget *parent) : QGridLayout(parent)
         setColumnMinimumWidth(x, 32);
         for (int y = 0; y < size; y++)
         {
-            Rocker * rocker = new Rocker(x, y);
+            int randomState = qrand() % 2;
+            Rocker * rocker = new Rocker(x, y, (bool)randomState);
             addWidget(rocker, x, y);
             _rockerMap.append(rocker);
             connect(rocker, &Rocker::clickedOverride, this, &RockerMatrix::clicked);
@@ -27,11 +28,20 @@ RockerMatrix::RockerMatrix(int size, QWidget *parent) : QGridLayout(parent)
     }
 }
 
+Rocker * RockerMatrix::getRocker(int x, int y)
+{
+    int index = x + y * _size;
+    Q_ASSERT(index < _rockerMap.size());
+    return _rockerMap[index];
+}
+
 void RockerMatrix::toggleRocker(int x, int y)
 {
-    qDebug() << "Toggling rocker (" << x << "," << y << ")";
-    int index = x + y * _size;
-    Rocker * r = _rockerMap[index];
-    r->toggle();
+    getRocker(x, y)->toggle();
+}
+
+bool RockerMatrix::rockerState(int x, int y)
+{
+    return getRocker(x, y)->isChecked();
 }
 
