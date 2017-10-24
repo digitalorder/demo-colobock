@@ -26,20 +26,22 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += main.cpp\
         mainwindow.cpp \
     rocker.cpp \
-    rockermatrix.cpp \
-    switchlogic.cpp \
     winlogic.cpp \
-    switchesstate.cpp \
     locksstate.cpp \
     lock.cpp \
-    locksarray.cpp
+    locksarray.cpp \
+    rockersstate.cpp \
+    rockersmatrix.cpp \
+    lockslogic.cpp \
+    rockerslogic.cpp
 
 HEADERS  += mainwindow.h \
     rocker.h \
-    rockermatrix.h \
-    switchlogic.h \
     winlogic.h \
-    switchesstate.h \
     locksstate.h \
     lock.h \
-    locksarray.h
+    locksarray.h \
+    rockersstate.h \
+    rockersmatrix.h \
+    lockslogic.h \
+    rockerslogic.h

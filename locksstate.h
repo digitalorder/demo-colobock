@@ -9,6 +9,7 @@ class LocksState
 
 public:
     LocksState(int size);
+    int size() { return _storage.size(); }
     void assign(int x, Lock::State value);
     Lock::State read(int x);
 };

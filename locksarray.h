@@ -15,12 +15,12 @@ class LocksArray : public QGridLayout
 public:
     explicit LocksArray(int size = 2, QWidget *parent = 0);
     int size() { return _lockMap.size(); }
-    Lock::State lockState(int x);
+    void setState(int x, Lock::State state);
 
 signals:
 
 public slots:
-    void locksSwitched(LocksState state);
+    void locksSwitchedSlot(LocksState state);
 };
 
 #endif // LOCKSARRAY_H

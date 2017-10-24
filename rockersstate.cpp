@@ -1,7 +1,7 @@
-#include "switchesstate.h"
+#include "rockersstate.h"
 #include <QDebug>
 
-SwitchesState::SwitchesState(int size): _size(size)
+RockersState::RockersState(int size): _size(size)
 {
     _storage.resize(size);
     for (int i = 0; i < size; i++)
@@ -10,19 +10,19 @@ SwitchesState::SwitchesState(int size): _size(size)
     }
 }
 
-int SwitchesState::getIndex(int x, int y)
+int RockersState::getIndex(int x, int y)
 {
     int result = x + y * _size;
     Q_ASSERT(result < _storage.size());
     return result;
 }
 
-void SwitchesState::assign(int x, int y, bool value)
+void RockersState::assign(int x, int y, Rocker::State value)
 {
     _storage[x][y] = value;
 }
 
-bool SwitchesState::read(int x, int y)
+Rocker::State RockersState::read(int x, int y)
 {
     return _storage[x][y];
 }

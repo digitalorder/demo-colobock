@@ -2,18 +2,20 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "rockermatrix.h"
+#include "rockersmatrix.h"
+#include "rockerslogic.h"
 #include "locksarray.h"
-#include "switchlogic.h"
+#include "lockslogic.h"
 #include "winlogic.h"
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
-    RockerMatrix * _rockers;
+    RockersMatrix * _rockers;
+    RockersLogic * _rockers_logic;
     LocksArray * _locks;
-    SwitchLogic * _switch_logic;
+    LocksLogic * _locks_logic;
     WinLogic * _win_logic;
 
 public:

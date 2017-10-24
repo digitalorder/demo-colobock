@@ -5,7 +5,7 @@
 #include <QVector>
 #include "rocker.h"
 
-class RockerMatrix : public QGridLayout
+class RockersMatrix : public QGridLayout
 {
     Q_OBJECT
 
@@ -17,11 +17,11 @@ private slots:
     void clicked(int x, int y);
 
 public:
-    explicit RockerMatrix(int _size = 2, QWidget *parent = 0);
+    explicit RockersMatrix(int _size = 2, QWidget *parent = 0);
 
     int size() { return _size; }
     void toggleRocker(int x, int y);
-    bool rockerState(int x, int y);
+    Rocker::State rockerState(int x, int y);
 
 signals:
     void clickedSignal(int x, int y);

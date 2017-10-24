@@ -7,11 +7,11 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    int matrixSize = 3;
+    int matrixSize = 2;
     QWidget *centralWidget = new QWidget(this);
     QVBoxLayout *mainLayout = new QVBoxLayout();
     _locks = new LocksArray(matrixSize);
-    _rockers = new RockerMatrix(matrixSize);
+    _rockers = new RockersMatrix(matrixSize);
     mainLayout->addLayout(_locks);
     mainLayout->addLayout(_rockers);
     centralWidget->setLayout(mainLayout);
@@ -21,14 +21,16 @@ MainWindow::MainWindow(QWidget *parent)
     centralWidget->setMinimumWidth(matrixSize * 48);
     centralWidget->setMaximumWidth(matrixSize * 48);
 
-    _switch_logic = new SwitchLogic(_rockers, this);
-    _win_logic = new WinLogic(matrixSize, this);
+    _rockers_logic = new RockersLogic(_rockers, this);
+    _locks_logic = new LocksLogic(_locks, this);
+    _win_logic = new WinLogic(this);
 
     setWindowTitle("Colobock demo");
 
-    connect(_rockers, &RockerMatrix::clickedSignal, _switch_logic, &SwitchLogic::rockerSwitched);
-    connect(_switch_logic, &SwitchLogic::newSwitchesState, _win_logic, &WinLogic::newSwitchesState);
-    connect(_win_logic, &WinLogic::newLocksState, _locks, &LocksArray::locksSwitched);
+    connect(_rockers, &RockersMatrix::clickedSignal, _rockers_logic, &RockersLogic::rockerSwitched);
+    connect(_rockers_logic, &RockersLogic::newRockersStateSignal, _locks_logic, &LocksLogic::newRockersStateSlot);
+    connect(_locks_logic, &LocksLogic::newLocksStateSignal, _locks, &LocksArray::locksSwitchedSlot);
+    connect(_locks_logic, &LocksLogic::newLocksStateSignal, _win_logic, &WinLogic::newLocksStateSlot);
     connect(_win_logic, &WinLogic::win, this, &MainWindow::winCatcher);
 }
 

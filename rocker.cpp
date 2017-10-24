@@ -1,25 +1,13 @@
 #include "rocker.h"
 
-QString Rocker::stateToText()
-{
-    if (isChecked())
-    {
-        return QString("|");
-    }
-    else
-    {
-        return QString("-");
-    }
-}
-
 void Rocker::clickedEventCatcher(bool)
 {
     emit clickedOverride(_x, _y);
 }
 
-void Rocker::toggledEventCatcher(bool checked)
+void Rocker::toggledEventCatcher(bool state)
 {
-    if (checked)
+    if (state)
     {
         setText("|");
     }
@@ -29,16 +17,44 @@ void Rocker::toggledEventCatcher(bool checked)
     }
 }
 
-Rocker::Rocker(int x, int y, bool state, QWidget *parent) : QPushButton(parent), _x(x), _y(y)
+void Rocker::setState(State state)
+{
+    bool boolRepresentation = state == VERTICAL;
+    setChecked(boolRepresentation);
+    toggledEventCatcher(boolRepresentation);
+}
+
+Rocker::State Rocker::getState()
+{
+    if (isChecked())
+    {
+        return VERTICAL;
+    }
+    else
+    {
+        return HORIZONTAL;
+    }
+}
+
+void Rocker::toggleState()
+{
+    if (getState() == HORIZONTAL)
+    {
+        setState(VERTICAL);
+    }
+    else
+    {
+        setState(HORIZONTAL);
+    }
+}
+
+Rocker::Rocker(int x, int y, State state, QWidget *parent) : QPushButton(parent), _x(x), _y(y)
 {
     setMaximumHeight(32);
     setMaximumWidth(32);
-    setText(stateToText());
     setCheckable(true);
-    setChecked(state);
-    toggledEventCatcher(state);
+    setState(state);
 
     connect(this, &Rocker::clicked, this, &Rocker::clickedEventCatcher);
     connect(this, &Rocker::toggled, this, &Rocker::toggledEventCatcher);
 }
-
