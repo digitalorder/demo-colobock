@@ -27,9 +27,8 @@ RockersState RockersLogic::getState()
     return state;
 }
 
-void RockersLogic::rockerSwitched(int x, int y)
+void RockersLogic::toggleRelatedRockers(int x, int y)
 {
-    qDebug() << "RockersLogic: rocker (" << x << "," << y << ") switched";
     int delta = 1;
     int toggled_count;
     do
@@ -57,6 +56,20 @@ void RockersLogic::rockerSwitched(int x, int y)
         }
         delta++;
     } while (toggled_count > 0);
+}
 
+void RockersLogic::rockerSwitchedSlot(int x, int y)
+{
+    qDebug() << "RockersLogic: rocker (" << x << "," << y << ") switched";
+    toggleRelatedRockers(x, y);
+    emit rockerSwitchedSignal(x, y);
+    emitNewRockersStateSignal();
+}
+
+void RockersLogic::revertAction(int x, int y)
+{
+    qDebug() << "RockersLogic: reverting rocker (" << x << "," << y << ")";
+    toggleRelatedRockers(x, y);
+    _matrix->toggleRocker(x, y);
     emitNewRockersStateSignal();
 }

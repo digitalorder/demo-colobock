@@ -33,7 +33,8 @@ SOURCES += main.cpp\
     rockersstate.cpp \
     rockersmatrix.cpp \
     lockslogic.cpp \
-    rockerslogic.cpp
+    rockerslogic.cpp \
+    logger.cpp
 
 HEADERS  += mainwindow.h \
     rocker.h \
@@ -44,4 +45,5 @@ HEADERS  += mainwindow.h \
     rockersstate.h \
     rockersmatrix.h \
     lockslogic.h \
-    rockerslogic.h
+    rockerslogic.h \
+    logger.h
