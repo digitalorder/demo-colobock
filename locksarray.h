@@ -16,6 +16,7 @@ public:
     explicit LocksArray(int size = 2, QWidget *parent = 0);
     int size() { return _lockMap.size(); }
     void setState(int x, Lock::State state);
+    void reinit(int matrixSize);
 
 signals:
 

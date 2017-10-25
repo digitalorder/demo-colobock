@@ -24,20 +24,9 @@ Rocker::State RockersMatrix::generateRockerState()
 
 RockersMatrix::RockersMatrix(int size, QWidget *parent) : QGridLayout(parent)
 {
-    this->_size = size;
     setSpacing(0);
-    for (int x = 0; x < size; x++)
-    {
-        setRowMinimumHeight(x, 32);
-        setColumnMinimumWidth(x, 32);
-        for (int y = 0; y < size; y++)
-        {
-            Rocker * rocker = new Rocker(x, y, generateRockerState());
-            addWidget(rocker, x, y);
-            _rockerMap.append(rocker);
-            connect(rocker, &Rocker::clickedOverride, this, &RockersMatrix::clicked);
-        }
-    }
+    reinit(size);
+
 }
 
 Rocker * RockersMatrix::getRocker(int x, int y)
@@ -63,5 +52,37 @@ void RockersMatrix::shuffle()
     {
         (*r)->setState(generateRockerState());
     }
+}
+
+QSize RockersMatrix::sizeHint() const
+{
+    return QSize(40 * _size, 48 * _size);
+}
+
+void RockersMatrix::reinit(int matrixSize)
+{
+    this->_size = matrixSize;
+    for (auto rocker = _rockerMap.begin(); rocker != _rockerMap.end(); ++rocker)
+    {
+        removeWidget(*rocker);
+        delete *rocker;
+    }
+
+    _rockerMap.clear();
+    for (int x = 0; x < matrixSize; x++)
+    {
+        setRowMinimumHeight(x, 32);
+        setColumnMinimumWidth(x, 32);
+        for (int y = 0; y < matrixSize; y++)
+        {
+            Rocker * rocker = new Rocker(x, y, generateRockerState());
+            addWidget(rocker, x, y);
+            _rockerMap.append(rocker);
+            connect(rocker, &Rocker::clickedOverride, this, &RockersMatrix::clicked);
+        }
+    }
+    setSizeConstraint(QLayout::SetFixedSize);
+    QRect r(0, 0, 48 * _size, 48 * _size);
+    this->setGeometry(r);
 }
 

@@ -13,6 +13,7 @@ class LocksLogic : public QObject
 
 public:
     explicit LocksLogic(LocksArray * locks, QObject *parent = 0);
+    void newGameAction(int matrixSize);
 
 signals:
     void newLocksStateSignal(LocksState state);

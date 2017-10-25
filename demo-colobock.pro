@@ -34,7 +34,8 @@ SOURCES += main.cpp\
     rockersmatrix.cpp \
     lockslogic.cpp \
     rockerslogic.cpp \
-    logger.cpp
+    logger.cpp \
+    newgamedialog.cpp
 
 HEADERS  += mainwindow.h \
     rocker.h \
@@ -46,4 +47,5 @@ HEADERS  += mainwindow.h \
     rockersmatrix.h \
     lockslogic.h \
     rockerslogic.h \
-    logger.h
+    logger.h \
+    newgamedialog.h

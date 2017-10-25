@@ -24,14 +24,15 @@ class MainWindow : public QMainWindow
     QPushButton * _btn_redo;
     QPushButton * _btn_new_game;
     QLabel * _lbl_move_counter;
+    QWidget * _central_widget;
     int _matrix_size;
+    void restartRequested(int matrixSize);
+    void drawWidgets();
 
 public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-signals:
-    void restartRequested(int matrixSize);
 
 public slots:
     void winCatcher();

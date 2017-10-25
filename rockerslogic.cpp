@@ -79,6 +79,10 @@ void RockersLogic::newGameAction(int matrixSize)
     if (matrixSize == _matrix->size())
     {
         _matrix->shuffle();
-        emitNewRockersStateSignal();
     }
+    else
+    {
+        _matrix->reinit(matrixSize);
+    }
+    emitNewRockersStateSignal();
 }

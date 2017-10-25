@@ -5,6 +5,56 @@
 #include <QDebug>
 #include <QSpacerItem>
 #include <QMessageBox>
+#include "newgamedialog.h"
+
+QHBoxLayout *buttonsLayout;
+QHBoxLayout *locksLayout;
+QHBoxLayout *rockersLayout;
+QVBoxLayout *mainLayout;
+
+void MainWindow::restartRequested(int matrixSize)
+{
+    _logger->newGameAction(matrixSize);
+    _rockers_logic->newGameAction(matrixSize);
+    _locks_logic->newGameAction(matrixSize);
+    _rockers_logic->emitNewRockersStateSignal();
+}
+
+void MainWindow::drawWidgets()
+{
+    buttonsLayout->addWidget(_btn_undo);
+    buttonsLayout->addWidget(_btn_redo);
+    buttonsLayout->addSpacerItem(new QSpacerItem(2, 0, QSizePolicy::Expanding));
+    buttonsLayout->addWidget(_lbl_move_counter);
+    buttonsLayout->addSpacerItem(new QSpacerItem(2, 0, QSizePolicy::Expanding));
+    buttonsLayout->addWidget(_btn_new_game);
+    buttonsLayout->setMargin(0);
+
+    locksLayout->addSpacerItem(new QSpacerItem(2, 0, QSizePolicy::Expanding));
+    locksLayout->addLayout(_locks);
+    locksLayout->setMargin(0);
+    locksLayout->addSpacerItem(new QSpacerItem(2, 0, QSizePolicy::Expanding));
+
+    rockersLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
+    rockersLayout->addLayout(_rockers);
+    rockersLayout->setMargin(0);
+//    rockersLayout->setAlignment(_rockers, Qt::AlignBottom);
+    rockersLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
+
+    mainLayout->addLayout(buttonsLayout);
+    mainLayout->addLayout(locksLayout);
+    mainLayout->addLayout(rockersLayout);
+
+    _central_widget->setLayout(mainLayout);
+    _central_widget->adjustSize();
+
+    setWindowTitle("Colobock demo");
+//    setGeometry(_central_widget->rect());
+    resize(_central_widget->size());
+    _central_widget->adjustSize();
+    resize(_central_widget->size());
+
+}
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), _matrix_size(4)
@@ -12,56 +62,27 @@ MainWindow::MainWindow(QWidget *parent)
     _locks = new LocksArray(_matrix_size);
     _rockers = new RockersMatrix(_matrix_size);
     _btn_undo = new QPushButton(QString("<-"), this);
-    _btn_undo->setMaximumWidth(32);
+//    _btn_undo->setMaximumWidth(32);
     _btn_undo->setEnabled(false);
     _btn_redo = new QPushButton(QString("->"), this);
-    _btn_redo->setMaximumWidth(32);
+//    _btn_redo->setMaximumWidth(32);
     _btn_redo->setEnabled(false);
-    _btn_new_game = new QPushButton(QString("*"), this);
-    _btn_new_game->setMaximumWidth(32);
+    _btn_new_game = new QPushButton(QString("New"), this);
+//    _btn_new_game->setMaximumWidth(32);
     _lbl_move_counter = new QLabel(QString("Moves: 0"), this);
+    _central_widget = new QWidget(this);
 
     _rockers_logic = new RockersLogic(_rockers, this);
     _locks_logic = new LocksLogic(_locks, this);
     _win_logic = new WinLogic(this);
     _logger = new Logger(this);
 
-    QHBoxLayout *buttonsLayout = new QHBoxLayout();
-    buttonsLayout->addWidget(_btn_undo);
-    buttonsLayout->addWidget(_btn_redo);
-    buttonsLayout->addSpacerItem(new QSpacerItem(2, 0, QSizePolicy::Expanding));
-    buttonsLayout->addWidget(_lbl_move_counter);
-    buttonsLayout->addSpacerItem(new QSpacerItem(2, 0, QSizePolicy::Expanding));
-    buttonsLayout->addWidget(_btn_new_game);
+    buttonsLayout = new QHBoxLayout();
+    locksLayout = new QHBoxLayout();
+    rockersLayout = new QHBoxLayout();
+    mainLayout = new QVBoxLayout();
 
-    QHBoxLayout *locksLayout = new QHBoxLayout();
-    locksLayout->addSpacerItem(new QSpacerItem(2, 0, QSizePolicy::Expanding));
-    locksLayout->addLayout(_locks);
-    locksLayout->addSpacerItem(new QSpacerItem(2, 0, QSizePolicy::Expanding));
-
-    QHBoxLayout *rockersLayout = new QHBoxLayout();
-    rockersLayout->addSpacerItem(new QSpacerItem(2, 0, QSizePolicy::Expanding));
-    rockersLayout->addLayout(_rockers);
-    rockersLayout->addSpacerItem(new QSpacerItem(2, 0, QSizePolicy::Expanding));
-
-    QVBoxLayout *mainLayout = new QVBoxLayout();
-    mainLayout->addLayout(buttonsLayout);
-    mainLayout->addLayout(locksLayout);
-    mainLayout->addLayout(rockersLayout);
-
-    QWidget *centralWidget = new QWidget(this);
-    centralWidget->setLayout(mainLayout);
-    // todo remove this dependency
-    centralWidget->setGeometry(0, 0, (_matrix_size + 1) * 48, (_matrix_size + 2) * 48);
-    QPalette pal = palette();
-
-    // set black background
-    pal.setColor(QPalette::Background, Qt::white);
-    centralWidget->setAutoFillBackground(true);
-    centralWidget->setPalette(pal);
-
-    setWindowTitle("Colobock demo");
-    setGeometry(centralWidget->rect());
+    drawWidgets();
 
     connect(_rockers, &RockersMatrix::clickedSignal, _rockers_logic, &RockersLogic::rockerSwitchedSlot);
     connect(_rockers_logic, &RockersLogic::newRockersStateSignal, _locks_logic, &LocksLogic::newRockersStateSlot);
@@ -75,8 +96,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(_logger, &Logger::undoAvailablityChanged, _btn_undo, &QPushButton::setEnabled);
     connect(_logger, &Logger::redoAvailablityChanged, _btn_redo, &QPushButton::setEnabled);
     connect(_logger, &Logger::moveCounterChanged, this, &MainWindow::moveCounterChanged);
-    connect(this, &MainWindow::restartRequested, _logger, &Logger::newGameAction);
-    connect(this, &MainWindow::restartRequested, _rockers_logic, &RockersLogic::newGameAction);
     connect(_btn_new_game, &QPushButton::clicked, this, &MainWindow::newGameRequested);
 
     _rockers_logic->emitNewRockersStateSignal();
@@ -113,5 +132,13 @@ void MainWindow::moveCounterChanged(int value)
 
 void MainWindow::newGameRequested()
 {
-    emit restartRequested(_matrix_size);
+    NewGameDialog dialog(_matrix_size);
+    dialog.setModal(true);
+    int dialogResult = dialog.exec();
+    if (dialogResult == QDialog::Accepted)
+    {
+        _matrix_size = dialog.matrixSize();
+        restartRequested(_matrix_size);
+        drawWidgets();
+    }
 }

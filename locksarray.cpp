@@ -4,14 +4,7 @@
 LocksArray::LocksArray(int size, QWidget *parent): QGridLayout(parent)
 {
     setSpacing(3);
-    for (int x = 0; x < size; x++)
-    {
-        setRowMinimumHeight(0, 16);
-        setColumnMinimumWidth(x, 16);
-        Lock * lock = new Lock(x);
-        addWidget(lock, 0, x);
-        _lockMap.append(lock);
-    }
+    reinit(size);
 }
 
 void LocksArray::locksSwitchedSlot(LocksState state)
@@ -25,5 +18,24 @@ void LocksArray::locksSwitchedSlot(LocksState state)
 void LocksArray::setState(int x, Lock::State state)
 {
     _lockMap.at(x)->setState(state);
+}
+
+void LocksArray::reinit(int matrixSize)
+{
+    for (auto lock = _lockMap.begin(); lock != _lockMap.end(); ++lock)
+    {
+        removeWidget(*lock);
+        delete *lock;
+    }
+
+    _lockMap.clear();
+    for (int x = 0; x < matrixSize; x++)
+    {
+        setRowMinimumHeight(0, 16);
+        setColumnMinimumWidth(x, 16);
+        Lock * lock = new Lock(x);
+        addWidget(lock, 0, x);
+        _lockMap.append(lock);
+    }
 }
 
