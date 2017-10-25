@@ -1,9 +1,24 @@
 #include "rockerslogic.h"
 
+struct ToggleContext
+{
+    int distance;
+    int x;
+    int y;
+    bool revertAction;
+};
+
+ToggleContext _toggle_context;
+
 RockersLogic::RockersLogic(RockersMatrix *matrix, QWidget *parent) : QObject(parent)
 {
     _matrix = matrix;
     emitNewRockersStateSignal();
+    _delay_timer = new QTimer(this);
+    _delay_timer->setInterval(300);
+    _delay_timer->setSingleShot(true);
+
+    connect(_delay_timer, &QTimer::timeout, this, &RockersLogic::rockerDelayTimeout);
 }
 
 void RockersLogic::emitNewRockersStateSignal()
@@ -28,47 +43,67 @@ RockersState RockersLogic::getState()
 
 void RockersLogic::toggleRelatedRockers(int x, int y)
 {
-    int delta = 1;
-    int toggled_count;
-    do
+    int toggled_count = 0;
+    if (x - _toggle_context.distance >= 0)
     {
-        toggled_count = 0;
-        if (x - delta >= 0)
+        _matrix->toggleRocker(x - _toggle_context.distance, y);
+        toggled_count++;
+    }
+    if (x + _toggle_context.distance < _matrix->size())
+    {
+        _matrix->toggleRocker(x + _toggle_context.distance, y);
+        toggled_count++;
+    }
+    if (y - _toggle_context.distance >= 0)
+    {
+        _matrix->toggleRocker(x, y - _toggle_context.distance);
+        toggled_count++;
+    }
+    if (y + _toggle_context.distance < _matrix->size())
+    {
+        _matrix->toggleRocker(x, y + _toggle_context.distance);
+        toggled_count++;
+    }
+    _toggle_context.distance++;
+    if (toggled_count)
+    {
+        _delay_timer->start();
+    }
+    else
+    {
+        emit switchingComplete();
+        if (!_toggle_context.revertAction)
         {
-            _matrix->toggleRocker(x - delta, y);
-            toggled_count++;
+            emit rockerSwitchedSignal(x, y);
         }
-        if (x + delta < _matrix->size())
-        {
-            _matrix->toggleRocker(x + delta, y);
-            toggled_count++;
-        }
-        if (y - delta >= 0)
-        {
-            _matrix->toggleRocker(x, y - delta);
-            toggled_count++;
-        }
-        if (y + delta < _matrix->size())
-        {
-            _matrix->toggleRocker(x, y + delta);
-            toggled_count++;
-        }
-        delta++;
-    } while (toggled_count > 0);
+        emitNewRockersStateSignal();
+    }
 }
 
 void RockersLogic::rockerSwitchedSlot(int x, int y)
 {
-    toggleRelatedRockers(x, y);
-    emit rockerSwitchedSignal(x, y);
-    emitNewRockersStateSignal();
+    _toggle_context.x = x;
+    _toggle_context.y = y;
+    _toggle_context.distance = 1;
+    _toggle_context.revertAction = false;
+    emit switchingStarted();
+    _delay_timer->start();
+}
+
+void RockersLogic::rockerDelayTimeout()
+{
+    toggleRelatedRockers(_toggle_context.x, _toggle_context.y);
 }
 
 void RockersLogic::revertAction(int x, int y)
 {
-    toggleRelatedRockers(x, y);
     _matrix->toggleRocker(x, y);
-    emitNewRockersStateSignal();
+    _toggle_context.x = x;
+    _toggle_context.y = y;
+    _toggle_context.distance = 1;
+    _toggle_context.revertAction = true;
+    emit switchingStarted();
+    _delay_timer->start();
 }
 
 void RockersLogic::newGameAction(int matrixSize)

@@ -23,6 +23,12 @@ void Logger::emitAvailabilityNotifications()
     emit redoAvailablityChanged(!_undo_history.empty());
 }
 
+void Logger::emitNoAvailabilityNotifications()
+{
+    emit undoAvailablityChanged(false);
+    emit redoAvailablityChanged(false);
+}
+
 void Logger::newUserAction(int x, int y)
 {
     updateMoveCounter();
@@ -55,5 +61,15 @@ void Logger::newGameAction(int matrixSize)
     resetMoveCounter();
     _undo_history.clear();
     _move_history.clear();
+    emitAvailabilityNotifications();
+}
+
+void Logger::disable()
+{
+    emitNoAvailabilityNotifications();
+}
+
+void Logger::enable()
+{
     emitAvailabilityNotifications();
 }

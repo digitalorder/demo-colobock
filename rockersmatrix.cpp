@@ -26,6 +26,22 @@ RockersMatrix::RockersMatrix(int size, QWidget *parent) : QGridLayout(parent)
     reinit(size);
 }
 
+void RockersMatrix::disable()
+{
+    for (auto r = _rockerMap.begin(); r != _rockerMap.end(); ++r)
+    {
+        (*r)->setEnabled(false);
+    }
+}
+
+void RockersMatrix::enable()
+{
+    for (auto r = _rockerMap.begin(); r != _rockerMap.end(); ++r)
+    {
+        (*r)->setEnabled(true);
+    }
+}
+
 Rocker * RockersMatrix::getRocker(int x, int y)
 {
     int index = x * _size + y;

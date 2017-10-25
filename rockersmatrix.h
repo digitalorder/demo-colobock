@@ -20,6 +20,8 @@ private slots:
 public:
     virtual QSize sizeHint() const;
     explicit RockersMatrix(int _size = 2, QWidget *parent = 0);
+    void disable();
+    void enable();
 
     int size() { return _size; }
     void toggleRocker(int x, int y);

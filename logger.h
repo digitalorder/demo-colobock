@@ -28,6 +28,7 @@ class Logger : public QObject
     void updateMoveCounter();
     void resetMoveCounter();
     void emitAvailabilityNotifications();
+    void emitNoAvailabilityNotifications();
 
 public:
     explicit Logger(QObject *parent = 0);
@@ -43,6 +44,8 @@ public slots:
     void redoLastUserAction();
     void undoLastUserAction();
     void newGameAction(int matrixSize);
+    void disable();
+    void enable();
 };
 
 #endif // LOGGER_H

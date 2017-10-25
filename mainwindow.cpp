@@ -119,6 +119,10 @@ void MainWindow::constructLayout()
     connect(_rockers, &RockersMatrix::clickedSignal, _rockers_logic, &RockersLogic::rockerSwitchedSlot);
     connect(_rockers_logic, &RockersLogic::newRockersStateSignal, _locks_logic, &LocksLogic::newRockersStateSlot);
     connect(_rockers_logic, &RockersLogic::rockerSwitchedSignal, _logger, &Logger::newUserAction);
+    connect(_rockers_logic, &RockersLogic::switchingStarted, _rockers, &RockersMatrix::disable);
+    connect(_rockers_logic, &RockersLogic::switchingStarted, _logger, &Logger::disable);
+    connect(_rockers_logic, &RockersLogic::switchingComplete, _rockers, &RockersMatrix::enable);
+    connect(_rockers_logic, &RockersLogic::switchingComplete, _logger, &Logger::enable);
     connect(_locks_logic, &LocksLogic::newLocksStateSignal, _locks, &LocksArray::locksSwitchedSlot);
     connect(_locks_logic, &LocksLogic::newLocksStateSignal, _win_logic, &WinLogic::newLocksStateSlot);
     connect(_win_logic, &WinLogic::win, this, &MainWindow::winCatcher);
