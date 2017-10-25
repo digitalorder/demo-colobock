@@ -35,6 +35,7 @@ NewGameDialog::NewGameDialog(int matrixSize)
 
     setWindowTitle("New game dialog");
     setGeometry(centralWidget->rect());
+    setFixedSize(QSize(size()));
 
     connect(_btn_ok, &QPushButton::clicked, this, &QDialog::accept);
     connect(_btn_cancel, &QPushButton::clicked, this, &QDialog::reject);

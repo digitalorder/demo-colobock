@@ -14,8 +14,10 @@ static QVBoxLayout *mainLayout;
 void MainWindow::restartLayout()
 {
     this->hide();
+    setMaximumSize(QSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX));
     deleteLayout();
     constructLayout();
+    setFixedSize(QSize(size()));
     this->show();
 }
 
@@ -50,6 +52,8 @@ void MainWindow::drawWidgets()
     resize(_central_widget->size());
     _central_widget->adjustSize();
     resize(_central_widget->size());
+    setFixedSize(QSize(size()));
+    setMaximumSize(QSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX));
 }
 
 MainWindow::MainWindow(QWidget *parent)
