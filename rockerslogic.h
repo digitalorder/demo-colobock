@@ -14,6 +14,7 @@ class RockersLogic : public QObject
     RockersState getState();
     QTimer * _delay_timer;
     void toggleRelatedRockers(int x, int y);
+    void startSwitching(int x, int y, bool reverseAction);
 
 public:
     explicit RockersLogic(RockersMatrix *matrix, QWidget * parent = 0);

@@ -87,11 +87,16 @@ void RockersLogic::toggleRelatedRockers(int x, int y)
     }
 }
 
-void RockersLogic::rockerSwitchedSlot(int x, int y)
+void RockersLogic::startSwitching(int x, int y, bool reverseAction)
 {
-    _toggle_context = ToggleContext(x, y, false);
+    _toggle_context = ToggleContext(x, y, reverseAction);
     emit switchingStarted();
     _delay_timer->start();
+}
+
+void RockersLogic::rockerSwitchedSlot(int x, int y)
+{
+    startSwitching(x, y, false);
 }
 
 void RockersLogic::rockerDelayTimeout()
@@ -102,9 +107,7 @@ void RockersLogic::rockerDelayTimeout()
 void RockersLogic::revertAction(int x, int y)
 {
     _matrix->toggleRocker(x, y);
-    _toggle_context = ToggleContext(x, y, true);
-    emit switchingStarted();
-    _delay_timer->start();
+    startSwitching(x, y, true);
 }
 
 void RockersLogic::newGameAction(int matrixSize)
