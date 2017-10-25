@@ -42,6 +42,14 @@ void RockersMatrix::enable()
     }
 }
 
+void RockersMatrix::shuffle()
+{
+    for (auto r = _rockerMap.begin(); r != _rockerMap.end(); ++r)
+    {
+        (*r)->setState(generateRockerState());
+    }
+}
+
 Rocker * RockersMatrix::getRocker(int x, int y)
 {
     int index = x * _size + y;
@@ -56,14 +64,6 @@ void RockersMatrix::toggleRocker(int x, int y)
 Rocker::State RockersMatrix::rockerState(int x, int y)
 {
     return getRocker(x, y)->getState();
-}
-
-void RockersMatrix::shuffle()
-{
-    for (auto r = _rockerMap.begin(); r != _rockerMap.end(); ++r)
-    {
-        (*r)->setState(generateRockerState());
-    }
 }
 
 QSize RockersMatrix::sizeHint() const

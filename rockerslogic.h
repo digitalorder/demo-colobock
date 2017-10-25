@@ -30,7 +30,6 @@ signals:
 public slots:
     void rockerSwitchedSlot(int x, int y);
     void revertAction(int x, int y);
-    void newGameAction(int matrixSize);
 
 private slots:
     void rockerDelayTimeout();

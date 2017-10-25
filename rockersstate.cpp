@@ -1,5 +1,4 @@
 #include "rockersstate.h"
-#include <QDebug>
 
 RockersState::RockersState(int size): _size(size)
 {
@@ -13,7 +12,6 @@ RockersState::RockersState(int size): _size(size)
 int RockersState::getIndex(int x, int y)
 {
     int result = x + y * _size;
-    Q_ASSERT(result < _storage.size());
     return result;
 }
 

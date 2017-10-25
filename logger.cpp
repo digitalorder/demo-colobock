@@ -55,15 +55,6 @@ void Logger::undoLastUserAction()
     emit revertAction(a.x(), a.y());
 }
 
-void Logger::newGameAction(int matrixSize)
-{
-    (void)matrixSize;
-    resetMoveCounter();
-    _undo_history.clear();
-    _move_history.clear();
-    emitAvailabilityNotifications();
-}
-
 void Logger::disable()
 {
     emitNoAvailabilityNotifications();

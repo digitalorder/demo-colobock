@@ -13,10 +13,10 @@ static QVBoxLayout *mainLayout;
 
 void MainWindow::restartLayout()
 {
-    _logger->newGameAction(_matrix_size);
-    _rockers_logic->newGameAction(_matrix_size);
-    _locks_logic->newGameAction(_matrix_size);
-    _rockers_logic->emitNewRockersStateSignal();
+    this->hide();
+    deleteLayout();
+    constructLayout();
+    this->show();
 }
 
 void MainWindow::drawWidgets()
@@ -173,17 +173,7 @@ void MainWindow::newGameRequested()
     int dialogResult = dialog.exec();
     if (dialogResult == QDialog::Accepted)
     {
-        if (dialog.matrixSize() == _matrix_size)
-        {
-            restartLayout();
-        }
-        else
-        {
-            _matrix_size = dialog.matrixSize();
-            this->hide();
-            deleteLayout();
-            constructLayout();
-            this->show();
-        }
+        _matrix_size = dialog.matrixSize();
+        restartLayout();
     }
 }

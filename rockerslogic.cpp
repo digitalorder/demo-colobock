@@ -109,16 +109,3 @@ void RockersLogic::revertAction(int x, int y)
     _matrix->toggleRocker(x, y);
     startSwitching(x, y, true);
 }
-
-void RockersLogic::newGameAction(int matrixSize)
-{
-    if (matrixSize == _matrix->size())
-    {
-        _matrix->shuffle();
-    }
-    else
-    {
-        _matrix->reinit(matrixSize);
-    }
-    emitNewRockersStateSignal();
-}

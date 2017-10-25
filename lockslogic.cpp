@@ -5,11 +5,6 @@ LocksLogic::LocksLogic(LocksArray *locks, QObject *parent) : QObject(parent), _l
 
 }
 
-void LocksLogic::newGameAction(int matrixSize)
-{
-    _locks->reinit(matrixSize);
-}
-
 void LocksLogic::newRockersStateSlot(RockersState state)
 {
     LocksState locksState(_locks->size());

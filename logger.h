@@ -43,7 +43,6 @@ public slots:
     void newUserAction(int x, int y);
     void redoLastUserAction();
     void undoLastUserAction();
-    void newGameAction(int matrixSize);
     void disable();
     void enable();
 };
