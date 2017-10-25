@@ -1,5 +1,4 @@
 #include "rockerslogic.h"
-#include <QDebug>
 
 RockersLogic::RockersLogic(RockersMatrix *matrix, QWidget *parent) : QObject(parent)
 {
@@ -60,7 +59,6 @@ void RockersLogic::toggleRelatedRockers(int x, int y)
 
 void RockersLogic::rockerSwitchedSlot(int x, int y)
 {
-    qDebug() << "RockersLogic: rocker (" << x << "," << y << ") switched";
     toggleRelatedRockers(x, y);
     emit rockerSwitchedSignal(x, y);
     emitNewRockersStateSignal();
@@ -68,7 +66,6 @@ void RockersLogic::rockerSwitchedSlot(int x, int y)
 
 void RockersLogic::revertAction(int x, int y)
 {
-    qDebug() << "RockersLogic: reverting rocker (" << x << "," << y << ")";
     toggleRelatedRockers(x, y);
     _matrix->toggleRocker(x, y);
     emitNewRockersStateSignal();

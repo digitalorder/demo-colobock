@@ -22,13 +22,6 @@ void LocksArray::setState(int x, Lock::State state)
 
 void LocksArray::reinit(int matrixSize)
 {
-    for (auto lock = _lockMap.begin(); lock != _lockMap.end(); ++lock)
-    {
-        removeWidget(*lock);
-        delete *lock;
-    }
-
-    _lockMap.clear();
     for (int x = 0; x < matrixSize; x++)
     {
         setRowMinimumHeight(0, 16);

@@ -49,3 +49,6 @@ HEADERS  += mainwindow.h \
     rockerslogic.h \
     logger.h \
     newgamedialog.h
+
+RESOURCES += \
+    resources.qrc

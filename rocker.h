@@ -12,7 +12,6 @@ class Rocker : public QPushButton
     QString stateToText();
 private slots:
     void clickedEventCatcher(bool);
-    void toggledEventCatcher(bool);
 
 public:
     enum State

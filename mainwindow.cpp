@@ -2,15 +2,14 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QGridLayout>
-#include <QDebug>
 #include <QSpacerItem>
 #include <QMessageBox>
 #include "newgamedialog.h"
 
-QHBoxLayout *buttonsLayout;
-QHBoxLayout *locksLayout;
-QHBoxLayout *rockersLayout;
-QVBoxLayout *mainLayout;
+static QHBoxLayout *buttonsLayout;
+static QHBoxLayout *locksLayout;
+static QHBoxLayout *rockersLayout;
+static QVBoxLayout *mainLayout;
 
 void MainWindow::restartLayout()
 {
@@ -47,7 +46,7 @@ void MainWindow::drawWidgets()
     _central_widget->setLayout(mainLayout);
     _central_widget->adjustSize();
 
-    setWindowTitle("Colobock demo");
+    setWindowTitle("Colobock demo by Denis Vasilkovskii");
     resize(_central_widget->size());
     _central_widget->adjustSize();
     resize(_central_widget->size());
@@ -75,16 +74,25 @@ void MainWindow::deleteLayout()
     delete _logger;
 }
 
+void setButtonIcon(QPushButton * button, const QString & resourcePath)
+{
+    QIcon ico;
+    ico.addPixmap(QPixmap(resourcePath), QIcon::Normal, QIcon::On);
+    button->setIcon(ico);
+    button->setIconSize(QSize(32, 32));
+    button->setFixedSize(QSize(32, 32));
+}
+
 void MainWindow::constructLayout()
 {
     _locks = new LocksArray(_matrix_size);
     _rockers = new RockersMatrix(_matrix_size);
-    _btn_undo = new QPushButton(QString("<-"), this);
+    _btn_undo = new QPushButton("", this);
     _btn_undo->setEnabled(false);
-    _btn_redo = new QPushButton(QString("->"), this);
+    _btn_redo = new QPushButton("", this);
     _btn_redo->setEnabled(false);
-    _btn_new_game = new QPushButton(QString("New"), this);
-    _lbl_move_counter = new QLabel(QString("Moves: 0"), this);
+    _btn_new_game = new QPushButton("", this);
+    _lbl_move_counter = new QLabel(QString("Moves: 0   "), this);
     _central_widget = new QWidget(this);
 
     _rockers_logic = new RockersLogic(_rockers, this);
@@ -96,6 +104,15 @@ void MainWindow::constructLayout()
     locksLayout = new QHBoxLayout();
     rockersLayout = new QHBoxLayout();
     mainLayout = new QVBoxLayout();
+
+    QPalette pal = palette();
+    pal.setColor(QPalette::Background, QColor(185, 180, 186));
+    _central_widget->setAutoFillBackground(true);
+    _central_widget->setPalette(pal);
+
+    setButtonIcon(_btn_undo, QString(":/images/resources/Undo.jpg"));
+    setButtonIcon(_btn_redo, QString(":/images/resources/Redo.jpg"));
+    setButtonIcon(_btn_new_game, QString(":/images/resources/Config.jpg"));
 
     drawWidgets();
 
@@ -125,12 +142,12 @@ void MainWindow::winCatcher()
 {
     QMessageBox msgBox;
     msgBox.setText("Cool! You was able to solve this puzzle. Would you like to try again?");
-    QAbstractButton* pButtonYes = msgBox.addButton("Wanna more!", QMessageBox::YesRole);
-    msgBox.addButton("Quit!", QMessageBox::NoRole);
+    QAbstractButton *btnYes = msgBox.addButton("I wanna more!", QMessageBox::YesRole);
+    msgBox.addButton("That's enough!", QMessageBox::NoRole);
 
     msgBox.exec();
 
-    if (msgBox.clickedButton()==pButtonYes)
+    if (msgBox.clickedButton()==btnYes)
     {
         restartLayout();
     }

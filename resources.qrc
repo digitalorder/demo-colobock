@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>resources/Vertical.jpg</file>
+        <file>resources/Horizontal.jpg</file>
+        <file>resources/Unlocked.jpg</file>
+        <file>resources/Locked.jpg</file>
+        <file>resources/Redo.jpg</file>
+        <file>resources/Undo.jpg</file>
+        <file>resources/Config.jpg</file>
+    </qresource>
+</RCC>
