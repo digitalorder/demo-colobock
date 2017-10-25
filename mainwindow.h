@@ -26,8 +26,10 @@ class MainWindow : public QMainWindow
     QLabel * _lbl_move_counter;
     QWidget * _central_widget;
     int _matrix_size;
-    void restartRequested(int matrixSize);
+    void restartLayout();
     void drawWidgets();
+    void deleteLayout();
+    void constructLayout();
 
 public:
     MainWindow(QWidget *parent = 0);

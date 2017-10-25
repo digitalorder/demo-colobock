@@ -12,11 +12,11 @@ QHBoxLayout *locksLayout;
 QHBoxLayout *rockersLayout;
 QVBoxLayout *mainLayout;
 
-void MainWindow::restartRequested(int matrixSize)
+void MainWindow::restartLayout()
 {
-    _logger->newGameAction(matrixSize);
-    _rockers_logic->newGameAction(matrixSize);
-    _locks_logic->newGameAction(matrixSize);
+    _logger->newGameAction(_matrix_size);
+    _rockers_logic->newGameAction(_matrix_size);
+    _locks_logic->newGameAction(_matrix_size);
     _rockers_logic->emitNewRockersStateSignal();
 }
 
@@ -38,7 +38,6 @@ void MainWindow::drawWidgets()
     rockersLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
     rockersLayout->addLayout(_rockers);
     rockersLayout->setMargin(0);
-//    rockersLayout->setAlignment(_rockers, Qt::AlignBottom);
     rockersLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
 
     mainLayout->addLayout(buttonsLayout);
@@ -49,26 +48,42 @@ void MainWindow::drawWidgets()
     _central_widget->adjustSize();
 
     setWindowTitle("Colobock demo");
-//    setGeometry(_central_widget->rect());
     resize(_central_widget->size());
     _central_widget->adjustSize();
     resize(_central_widget->size());
-
 }
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), _matrix_size(4)
 {
+    constructLayout();
+}
+
+void MainWindow::deleteLayout()
+{
+    delete _locks;
+    delete _rockers;
+    delete _btn_undo;
+    delete _btn_redo;
+    delete _btn_new_game;
+    delete _lbl_move_counter;
+    delete _central_widget;
+
+    delete _rockers_logic;
+    delete _locks_logic;
+    delete _win_logic;
+    delete _logger;
+}
+
+void MainWindow::constructLayout()
+{
     _locks = new LocksArray(_matrix_size);
     _rockers = new RockersMatrix(_matrix_size);
     _btn_undo = new QPushButton(QString("<-"), this);
-//    _btn_undo->setMaximumWidth(32);
     _btn_undo->setEnabled(false);
     _btn_redo = new QPushButton(QString("->"), this);
-//    _btn_redo->setMaximumWidth(32);
     _btn_redo->setEnabled(false);
     _btn_new_game = new QPushButton(QString("New"), this);
-//    _btn_new_game->setMaximumWidth(32);
     _lbl_move_counter = new QLabel(QString("Moves: 0"), this);
     _central_widget = new QWidget(this);
 
@@ -117,7 +132,7 @@ void MainWindow::winCatcher()
 
     if (msgBox.clickedButton()==pButtonYes)
     {
-        emit restartRequested(_matrix_size);
+        restartLayout();
     }
     else
     {
@@ -137,8 +152,17 @@ void MainWindow::newGameRequested()
     int dialogResult = dialog.exec();
     if (dialogResult == QDialog::Accepted)
     {
-        _matrix_size = dialog.matrixSize();
-        restartRequested(_matrix_size);
-        drawWidgets();
+        if (dialog.matrixSize() == _matrix_size)
+        {
+            restartLayout();
+        }
+        else
+        {
+            _matrix_size = dialog.matrixSize();
+            this->hide();
+            deleteLayout();
+            constructLayout();
+            this->show();
+        }
     }
 }
