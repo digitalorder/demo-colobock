@@ -1,11 +1,18 @@
 #include "rockerslogic.h"
 
-struct ToggleContext
+class ToggleContext
 {
-    int distance;
+public:
+    ToggleContext(): x(0), y(0), revertAction(false) {}
+
+    ToggleContext(int x, int y, bool revertAction): x(x), y(y), revertAction(revertAction), distance(1)
+    {
+    }
+
     int x;
     int y;
     bool revertAction;
+    int distance;
 };
 
 ToggleContext _toggle_context;
@@ -82,10 +89,7 @@ void RockersLogic::toggleRelatedRockers(int x, int y)
 
 void RockersLogic::rockerSwitchedSlot(int x, int y)
 {
-    _toggle_context.x = x;
-    _toggle_context.y = y;
-    _toggle_context.distance = 1;
-    _toggle_context.revertAction = false;
+    _toggle_context = ToggleContext(x, y, false);
     emit switchingStarted();
     _delay_timer->start();
 }
@@ -98,10 +102,7 @@ void RockersLogic::rockerDelayTimeout()
 void RockersLogic::revertAction(int x, int y)
 {
     _matrix->toggleRocker(x, y);
-    _toggle_context.x = x;
-    _toggle_context.y = y;
-    _toggle_context.distance = 1;
-    _toggle_context.revertAction = true;
+    _toggle_context = ToggleContext(x, y, true);
     emit switchingStarted();
     _delay_timer->start();
 }
