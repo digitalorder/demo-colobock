@@ -30,12 +30,12 @@ SOURCES += main.cpp\
     locksstate.cpp \
     lock.cpp \
     locksarray.cpp \
-    rockersstate.cpp \
     rockersmatrix.cpp \
     lockslogic.cpp \
     rockerslogic.cpp \
     logger.cpp \
-    newgamedialog.cpp
+    newgamedialog.cpp \
+    rockersmodel.cpp
 
 HEADERS  += mainwindow.h \
     rocker.h \
@@ -43,12 +43,12 @@ HEADERS  += mainwindow.h \
     locksstate.h \
     lock.h \
     locksarray.h \
-    rockersstate.h \
     rockersmatrix.h \
     lockslogic.h \
     rockerslogic.h \
     logger.h \
-    newgamedialog.h
+    newgamedialog.h \
+    rockersmodel.h
 
 RESOURCES += \
     resources.qrc

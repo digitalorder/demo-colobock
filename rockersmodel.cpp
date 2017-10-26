@@ -1,6 +1,6 @@
-#include "rockersstate.h"
+#include "rockersmodel.h"
 
-RockersState::RockersState(int size): _size(size)
+RockersModel::RockersModel(int size): _size(size)
 {
     _storage.resize(size);
     for (int i = 0; i < size; i++)
@@ -9,18 +9,18 @@ RockersState::RockersState(int size): _size(size)
     }
 }
 
-int RockersState::getIndex(int x, int y)
+int RockersModel::getIndex(int x, int y)
 {
     int result = x + y * _size;
     return result;
 }
 
-void RockersState::assign(int x, int y, Rocker::State value)
+void RockersModel::assign(int x, int y, Rocker::State value)
 {
     _storage[x][y] = value;
 }
 
-Rocker::State RockersState::read(int x, int y)
+Rocker::State RockersModel::read(int x, int y)
 {
     return _storage[x][y];
 }

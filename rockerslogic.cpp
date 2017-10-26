@@ -30,13 +30,13 @@ RockersLogic::RockersLogic(RockersMatrix *matrix, QWidget *parent) : QObject(par
 
 void RockersLogic::emitNewRockersStateSignal()
 {
-    RockersState s = getState();
+    RockersModel s = getState();
     emit newRockersStateSignal(s);
 }
 
-RockersState RockersLogic::getState()
+RockersModel RockersLogic::getState()
 {
-    RockersState state(_matrix->size());
+    RockersModel state(_matrix->size());
     for (int x = 0; x < _matrix->size(); x++)
     {
         for (int y = 0; y < _matrix->size(); y++)
@@ -109,3 +109,9 @@ void RockersLogic::revertAction(int x, int y)
     _matrix->toggleRocker(x, y);
     startSwitching(x, y, true);
 }
+
+//void RockersLogic::generateBoard()
+//{
+//    RockersState s;
+
+//}

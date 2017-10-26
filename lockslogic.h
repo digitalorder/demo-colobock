@@ -4,7 +4,7 @@
 #include <QObject>
 #include "locksarray.h"
 #include "locksstate.h"
-#include "rockersstate.h"
+#include "rockersmodel.h"
 
 class LocksLogic : public QObject
 {
@@ -18,7 +18,7 @@ signals:
     void newLocksStateSignal(LocksState state);
 
 public slots:
-    void newRockersStateSlot(RockersState state);
+    void newRockersStateSlot(RockersModel state);
 };
 
 #endif // LOCKSLOGIC_H

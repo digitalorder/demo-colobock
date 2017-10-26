@@ -4,14 +4,14 @@
 #include <QVector>
 #include "rocker.h"
 
-class RockersState
+class RockersModel
 {
     int _size;
     QVector<QVector<Rocker::State>> _storage;
     int getIndex(int x, int y);
 
 public:
-    RockersState(int size);
+    RockersModel(int size);
     void assign(int x, int y, Rocker::State value);
     Rocker::State read(int x, int y);
 };

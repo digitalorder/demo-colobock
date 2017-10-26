@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include "rockersmatrix.h"
-#include "rockersstate.h"
+#include "rockersmodel.h"
 #include "logger.h"
 #include <QTimer>
 
@@ -11,7 +11,7 @@ class RockersLogic : public QObject
 {
     Q_OBJECT
     RockersMatrix * _matrix;
-    RockersState getState();
+    RockersModel getState();
     QTimer * _delay_timer;
     void toggleRelatedRockers(int x, int y);
     void startSwitching(int x, int y, bool reverseAction);
@@ -21,7 +21,7 @@ public:
     void emitNewRockersStateSignal();
 
 signals:
-    void newRockersStateSignal(RockersState state);
+    void newRockersStateSignal(RockersModel state);
     void rockerSwitchedSignal(int x, int y);
     void undoUserActionSignal();
     void switchingStarted();

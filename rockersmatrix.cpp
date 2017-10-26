@@ -76,6 +76,7 @@ void RockersMatrix::reinit(int matrixSize)
     this->_size = matrixSize;
     for (int x = 0; x < matrixSize; x++)
     {
+
         for (int y = 0; y < matrixSize; y++)
         {
             Rocker * rocker = new Rocker(x, y, generateRockerState());

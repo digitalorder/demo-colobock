@@ -2,7 +2,7 @@
 #define WINLOGIC_H
 
 #include <QObject>
-#include "rockersstate.h"
+#include "rockersmodel.h"
 #include "locksstate.h"
 
 class WinLogic : public QObject

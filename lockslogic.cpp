@@ -5,7 +5,7 @@ LocksLogic::LocksLogic(LocksArray *locks, QObject *parent) : QObject(parent), _l
 
 }
 
-void LocksLogic::newRockersStateSlot(RockersState state)
+void LocksLogic::newRockersStateSlot(RockersModel state)
 {
     LocksState locksState(_locks->size());
     for (int x = 0; x < _locks->size(); x++)
