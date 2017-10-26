@@ -50,9 +50,7 @@ void MainWindow::drawWidgets()
 
     setWindowTitle("Colobock demo by Denis Vasilkovskii");
     resize(_central_widget->size());
-    _central_widget->adjustSize();
-    resize(_central_widget->size());
-    setFixedSize(QSize(size()));
+    setFixedSize(_central_widget->size());
     setMaximumSize(QSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX));
 }
 
