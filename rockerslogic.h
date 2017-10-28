@@ -24,7 +24,7 @@ signals:
 
 public slots:
     void rockerSwitchedSlot(int x, int y, ActionSource source);
-    void toggleRocker(int x, int y);
+    void toggleRocker(int x, int y, ActionSource source);
 
 private slots:
     void rockerDelayTimeout();

@@ -10,7 +10,7 @@ NewGameDialog::NewGameDialog(int matrixSize)
 {
     _btn_ok = new QPushButton("OK");
     _btn_cancel = new QPushButton("Cancel");
-    QLabel * lblMatrixSize = new QLabel("Desired matrix size (4-12): ");
+    QLabel * lblMatrixSize = new QLabel("Desired matrix size (2-12): ");
     _ledit_matrix_size = new QLineEdit(QString("%1").arg(matrixSize));
 
     QGroupBox *groupBox = new QGroupBox("Game settings", this);
@@ -50,9 +50,9 @@ int NewGameDialog::matrixSize()
         return 4;
     }
 
-    if (result < 4)
+    if (result < 2)
     {
-        return 4;
+        return 2;
     }
     if (result > 12)
     {

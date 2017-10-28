@@ -31,6 +31,7 @@ class MainWindow : public QMainWindow
     void drawWidgets();
     void deleteLayout();
     void constructLayout();
+    void showEvent(QShowEvent *);
 
 public:
     MainWindow(QWidget *parent = 0);

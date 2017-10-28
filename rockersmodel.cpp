@@ -22,6 +22,37 @@ Rocker::State RockersModel::read(int x, int y) const
     return _storage[x][y];
 }
 
+bool RockersModel::allRockersAreHorizontal()
+{
+    for (int x = 0; x < _size; x++)
+    {
+        for (int y = 0; y < _size; y++)
+        {
+            if (_storage[x][y] != Rocker::State::HORIZONTAL)
+            {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+void RockersModel::shuffle()
+{
+    do
+    {
+        for (int i = 0; i < _size * _size / 2; i++)
+        {
+            int x = qrand() % _size;
+            int y = qrand() % _size;
+            toggleRocker(x, y);
+            emit toggleRockerWithoutLogic(x, y);
+            emit toggleRockerWithLogic(x, y, ActionSource::MODEL);
+        }
+    } while (allRockersAreHorizontal());
+}
+
 QDebug operator<<(QDebug stream, const RockersModel &model)
 {
     stream << "RockersModel(" << endl;
@@ -58,15 +89,23 @@ void RockersModel::toggleRocker(int x, int y)
 
 void RockersModel::rockerToggled(int x, int y, ActionSource source)
 {
-    qDebug() << "RockersModel: catched a toggle at (" << x << "," << y << ") from " << source;
+    qDebug() << "RockersModel: catched a toggle at (" << x << "," << y << ") from" << source;
     toggleRocker(x, y);
-    if (source == ActionSource::LOGIC)
-    {
+    switch (source) {
+    case ActionSource::CONTROLLER:
+        // todo
+        break;
+    case ActionSource::LOGIC:
         emit toggleRockerWithoutLogic(x, y);
-    }
-    if (source == ActionSource::UNDO_REDO)
-    {
+        break;
+    case ActionSource::MODEL:
+        Q_ASSERT(false); // This should never happen
+        break;
+    case ActionSource::UNDO_REDO:
         emit toggleRockerWithoutLogic(x, y);
-        emit toggleRockerWithLogic(x, y);
+        emit toggleRockerWithLogic(x, y, source);
+        break;
+    default:
+        break;
     }
 }

@@ -1,6 +1,7 @@
 #ifndef LOCKSSTATE_H
 #define LOCKSSTATE_H
 
+#include <QDebug>
 #include "lock.h"
 
 class LocksModel
@@ -9,9 +10,11 @@ class LocksModel
 
 public:
     LocksModel(int size);
-    int size() { return _storage.size(); }
+    int size() const { return _storage.size(); }
     void assign(int x, Lock::State value);
-    Lock::State read(int x);
+    Lock::State read(int x) const;
 };
+
+QDebug operator <<(QDebug stream, const LocksModel &model);
 
 #endif // LOCKSSTATE_H

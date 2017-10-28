@@ -13,6 +13,7 @@ class RockersModel: public QObject, public Blockable
     bool _is_blocked;
     QVector<QVector<Rocker::State>> _storage;
     void toggleRocker(int x, int y);
+    bool allRockersAreHorizontal();
 
 public:
     RockersModel(int size);
@@ -22,11 +23,12 @@ public:
     virtual bool isBlocked() { return _is_blocked; }
     virtual void block() { _is_blocked = true; }
     virtual void unblock() { _is_blocked = false; emit modelStateUpdated(RockersModel(*this)); }
+    void shuffle();
 
 signals:
     void modelStateUpdated(const RockersModel & m);
     void toggleRockerWithoutLogic(int x, int y);
-    void toggleRockerWithLogic(int x, int y);
+    void toggleRockerWithLogic(int x, int y, ActionSource source);
 
 public slots:
     void rockerToggled(int x, int y, ActionSource source);

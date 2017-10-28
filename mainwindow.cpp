@@ -138,13 +138,19 @@ void MainWindow::constructLayout()
     connect(_logger, &Logger::redoAvailablityChanged, _btn_redo, &QPushButton::setEnabled);
     connect(_logger, &Logger::moveCounterChanged, this, &MainWindow::moveCounterChanged);
     connect(_btn_new_game, &QPushButton::clicked, this, &MainWindow::newGameRequested);
-
-//    _rockers_logic->emitNewRockersStateSignal();
 }
 
 MainWindow::~MainWindow()
 {
 
+}
+
+void MainWindow::showEvent(QShowEvent *)
+{
+    qDebug() << "Window has been loaded";
+    _win_logic->block();
+    _rockers_model->shuffle();
+    _win_logic->unblock();
 }
 
 void MainWindow::winCatcher()

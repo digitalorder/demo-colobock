@@ -10,6 +10,7 @@ class LocksLogic : public QObject
 {
     Q_OBJECT
     LocksArray * _locks;
+    bool _is_blocked;
 
 public:
     explicit LocksLogic(LocksArray * locks, QObject *parent = 0);

@@ -5,11 +5,16 @@
 #include "rockersmodel.h"
 #include "locksmodel.h"
 
-class WinLogic : public QObject
+class WinLogic : public QObject, public Blockable
 {
     Q_OBJECT
+    bool _is_blocked;
+
 public:
     explicit WinLogic(QObject *parent = 0);
+    virtual bool isBlocked() { return _is_blocked; }
+    virtual void block() { _is_blocked = true; }
+    virtual void unblock() { _is_blocked = false; }
 
 signals:
     void win();
