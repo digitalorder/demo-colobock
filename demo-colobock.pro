@@ -22,10 +22,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+INCLUDEPATH += Dialogs \
+    Models \
+    ViewControllers \
+    Logic \
+    Shared
 
 SOURCES += main.cpp\
-    Dialogs\mainwindow.cpp \
-    Dialogs\newgamedialog.cpp \
+    Dialogs/mainwindow.cpp \
+    Dialogs/newgamedialog.cpp \
     Models/rockersmodel.cpp \
     Models/locksmodel.cpp \
     Models/logger.cpp \
@@ -39,8 +44,8 @@ SOURCES += main.cpp\
     Shared/primitivetypes.cpp
 
 HEADERS  += \
-    Dialogs\mainwindow.h \
-    Dialogs\newgamedialog.h \
+    Dialogs/mainwindow.h \
+    Dialogs/newgamedialog.h \
     Models/rockersmodel.h \
     Models/locksmodel.h \
     Models/logger.h \
