@@ -20,12 +20,13 @@ public:
     int y() const { return _y; }
 };
 
-class Logger : public QObject
+class Logger : public QObject, public Blockable
 {
     Q_OBJECT
     QVector<UserAction> _move_history;
     QVector<UserAction> _undo_history;
     int _move_counter;
+    bool _is_blocked;
     void updateMoveCounter();
     void resetMoveCounter();
     void emitAvailabilityNotifications();
@@ -33,6 +34,9 @@ class Logger : public QObject
 
 public:
     explicit Logger(QObject *parent = 0);
+    virtual bool isBlocked() { return _is_blocked; }
+    virtual void block() { _is_blocked = true; emitNoAvailabilityNotifications(); }
+    virtual void unblock() { _is_blocked = false; emitAvailabilityNotifications(); }
 
 signals:
     void revertAction(int x, int y, ActionSource source);

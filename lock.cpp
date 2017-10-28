@@ -9,7 +9,6 @@ Lock::Lock(int x, QWidget *parent) : QPushButton(parent), _x(x)
     setIconSize(QSize(20, 32));
     setEnabled(false);
     setCheckable(true);
-//    setText("?");
     setMaximumHeight(32);
     setMaximumWidth(20);
 }
@@ -19,12 +18,23 @@ void Lock::setState(Lock::State state)
     _state = state;
     if (_state == Lock::LOCKED)
     {
-//        setText("L");
         setChecked(true);
     }
     else
     {
-//        setText("U");
         setChecked(false);
     }
+}
+
+QDebug operator <<(QDebug os, const Lock::State &state)
+{
+    if (state == Lock::State::LOCKED)
+    {
+        os << "Locked";
+    }
+    else
+    {
+        os << "Unlocked";
+    }
+    return os;
 }

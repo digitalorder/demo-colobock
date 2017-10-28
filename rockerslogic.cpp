@@ -30,7 +30,7 @@ ToggleContext _toggle_context(0, 0, ActionSource::MODEL, SwitchingTiming::INSTAN
 RockersLogic::RockersLogic(int size) : _size(size)
 {
     _delay_timer = new QTimer(this);
-    _delay_timer->setInterval(300);
+    _delay_timer->setInterval(500 / size);
     _delay_timer->setSingleShot(true);
 
     connect(_delay_timer, &QTimer::timeout, this, &RockersLogic::rockerDelayTimeout);

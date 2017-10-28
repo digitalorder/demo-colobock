@@ -1,5 +1,5 @@
-#ifndef SWITCHLOGIC_H
-#define SWITCHLOGIC_H
+#ifndef ROCKERSLOGIC_H
+#define ROCKERSLOGIC_H
 
 #include <QObject>
 #include "logger.h"
@@ -30,4 +30,4 @@ private slots:
     void rockerDelayTimeout();
 };
 
-#endif // SWITCHLOGIC_H
+#endif // ROCKERSLOGIC_H

@@ -3,20 +3,21 @@
 
 #include <QObject>
 #include "locksarray.h"
-#include "locksmodel.h"
 #include "rockersmodel.h"
 
 class LocksLogic : public QObject
 {
     Q_OBJECT
-    LocksArray * _locks;
+    int _size;
     bool _is_blocked;
 
 public:
-    explicit LocksLogic(LocksArray * locks, QObject *parent = 0);
+    explicit LocksLogic(int size, QObject *parent = 0);
 
 signals:
-    void newLocksStateSignal(LocksModel state);
+    void blockControllers();
+    void unblockControllers();
+    void lockStateChangedSignal(int x, Lock::State state);
 
 public slots:
     void newRockersStateSlot(const RockersModel &state);

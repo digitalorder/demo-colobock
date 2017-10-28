@@ -7,7 +7,7 @@ WinLogic::WinLogic(QObject *parent) :
 
 }
 
-void WinLogic::newLocksStateSlot(LocksModel state)
+void WinLogic::newLocksStateSlot(const LocksModel & state)
 {
     qDebug() << "WinLogic: received new model: " << state;
     if (isBlocked())

@@ -1,7 +1,7 @@
 #include "logger.h"
 #include <QDebug>
 
-Logger::Logger(QObject *parent) : QObject(parent), _move_counter(0)
+Logger::Logger(QObject *parent) : QObject(parent), _move_counter(0), _is_blocked(false)
 {
 }
 

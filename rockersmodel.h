@@ -1,5 +1,5 @@
-#ifndef SWITCHESSTATE_H
-#define SWITCHESSTATE_H
+#ifndef ROCKERSMODEL_H
+#define ROCKERSMODEL_H
 
 #include <QVector>
 #include <QDebug>
@@ -36,4 +36,4 @@ public slots:
 
 QDebug operator <<(QDebug stream, const RockersModel &model);
 
-#endif // SWITCHESSTATE_H
+#endif // ROCKERSMODEL_H

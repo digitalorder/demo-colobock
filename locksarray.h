@@ -18,10 +18,8 @@ public:
     void setState(int x, Lock::State state);
     void reinit(int matrixSize);
 
-signals:
-
 public slots:
-    void locksSwitchedSlot(LocksModel state);
+    void updateLocksStates(const LocksModel &state);
 };
 
 #endif // LOCKSARRAY_H

@@ -2,6 +2,7 @@
 #define LOCK_H
 
 #include <QPushButton>
+#include <QDebug>
 
 class Lock : public QPushButton
 {
@@ -26,5 +27,8 @@ signals:
 public slots:
     void setState(State);
 };
+
+QDebug operator <<(QDebug os, const Lock::State& state);
+
 
 #endif // LOCK_H

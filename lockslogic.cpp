@@ -1,6 +1,6 @@
 #include "lockslogic.h"
 
-LocksLogic::LocksLogic(LocksArray *locks, QObject *parent) : QObject(parent), _locks(locks)
+LocksLogic::LocksLogic(int size, QObject *parent) : QObject(parent), _size(size)
 {
 
 }
@@ -8,11 +8,11 @@ LocksLogic::LocksLogic(LocksArray *locks, QObject *parent) : QObject(parent), _l
 void LocksLogic::newRockersStateSlot(const RockersModel &state)
 {
     qDebug() << "LocksLogic: received new model:" << state;
-    LocksModel locksState(_locks->size());
-    for (int y = 0; y < _locks->size(); y++)
+    emit blockControllers();
+    for (int y = 0; y < _size; y++)
     {
         Lock::State lockState = Lock::UNLOCKED;
-        for (int x = 0; x < _locks->size(); x++)
+        for (int x = 0; x < _size; x++)
         {
              if (state.read(x, y))
              {
@@ -20,9 +20,8 @@ void LocksLogic::newRockersStateSlot(const RockersModel &state)
                  break;
              }
         }
-        _locks->setState(y, lockState);
-        locksState.assign(y, lockState);
+        emit lockStateChangedSignal(y, lockState);
     }
 
-    emit newLocksStateSignal(locksState);
+    emit unblockControllers();
 }

@@ -87,8 +87,11 @@ void setButtonIcon(QPushButton * button, const QString & resourcePath)
 void MainWindow::constructLayout()
 {
     _locks = new LocksArray(_matrix_size);
+    _locks_logic = new LocksLogic(_matrix_size);
+    _locks_model = new LocksModel(_matrix_size);
     _rockers = new RockersMatrix(_matrix_size);
     _rockers_model = new RockersModel(_matrix_size);
+    _rockers_logic = new RockersLogic(_matrix_size);
     _btn_undo = new QPushButton("", this);
     _btn_undo->setEnabled(false);
     _btn_redo = new QPushButton("", this);
@@ -97,8 +100,6 @@ void MainWindow::constructLayout()
     _lbl_move_counter = new QLabel(QString("Moves: 0   "), this);
     _central_widget = new QWidget(this);
 
-    _rockers_logic = new RockersLogic(_matrix_size);
-    _locks_logic = new LocksLogic(_locks, this);
     _win_logic = new WinLogic(this);
     _logger = new Logger(this);
 
@@ -121,15 +122,20 @@ void MainWindow::constructLayout()
     connect(_rockers, &RockersMatrix::rockerToggled, _rockers_logic, &RockersLogic::rockerSwitchedSlot);
     connect(_rockers_logic, &RockersLogic::blockControllers, _rockers, &RockersMatrix::block);
     connect(_rockers_logic, &RockersLogic::blockControllers, _rockers_model, &RockersModel::block);
+    connect(_rockers_logic, &RockersLogic::blockControllers, _logger, &Logger::block);
     connect(_rockers_logic, &RockersLogic::unblockControllers, _rockers, &RockersMatrix::unblock);
     connect(_rockers_logic, &RockersLogic::unblockControllers, _rockers_model, &RockersModel::unblock);
+    connect(_rockers_logic, &RockersLogic::unblockControllers, _logger, &Logger::unblock);
     connect(_rockers_logic, &RockersLogic::rockerSwitchedSignal, _rockers_model, &RockersModel::rockerToggled);
     connect(_rockers_model, &RockersModel::toggleRockerWithoutLogic, _rockers, &RockersMatrix::toggleRocker);
     connect(_rockers_model, &RockersModel::toggleRockerWithLogic, _rockers_logic, &RockersLogic::toggleRocker);
     connect(_rockers_model, &RockersModel::modelStateUpdated, _locks_logic, &LocksLogic::newRockersStateSlot);
     connect(_rockers, &RockersMatrix::rockerToggled, _logger, &Logger::newUserAction);
-    connect(_locks_logic, &LocksLogic::newLocksStateSignal, _locks, &LocksArray::locksSwitchedSlot);
-    connect(_locks_logic, &LocksLogic::newLocksStateSignal, _win_logic, &WinLogic::newLocksStateSlot);
+    connect(_locks_logic, &LocksLogic::blockControllers, _locks_model, &LocksModel::block);
+    connect(_locks_logic, &LocksLogic::unblockControllers, _locks_model, &LocksModel::unblock);
+    connect(_locks_logic, &LocksLogic::lockStateChangedSignal, _locks_model, &LocksModel::lockStateChangedSlot);
+    connect(_locks_model, &LocksModel::locksStateChangedSignal, _locks, &LocksArray::updateLocksStates);
+    connect(_locks_model, &LocksModel::locksStateChangedSignal, _win_logic, &WinLogic::newLocksStateSlot);
     connect(_win_logic, &WinLogic::win, this, &MainWindow::winCatcher);
     connect(_btn_undo, &QPushButton::clicked, _logger, &Logger::undoLastUserAction);
     connect(_btn_redo, &QPushButton::clicked, _logger, &Logger::redoLastUserAction);

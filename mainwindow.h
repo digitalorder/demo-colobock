@@ -8,6 +8,7 @@
 #include "rockersmodel.h"
 #include "locksarray.h"
 #include "lockslogic.h"
+#include "locksmodel.h"
 #include "winlogic.h"
 #include "logger.h"
 
@@ -17,6 +18,7 @@ class MainWindow : public QMainWindow
     RockersModel * _rockers_model;
     RockersMatrix * _rockers;
     RockersLogic * _rockers_logic;
+    LocksModel * _locks_model;
     LocksArray * _locks;
     LocksLogic * _locks_logic;
     WinLogic * _win_logic;

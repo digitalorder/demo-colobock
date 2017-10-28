@@ -1,20 +1,33 @@
-#ifndef LOCKSSTATE_H
-#define LOCKSSTATE_H
+#ifndef LOCKSMODEL_H
+#define LOCKSMODEL_H
 
+#include <QObject>
 #include <QDebug>
 #include "lock.h"
+#include "primitivetypes.h"
 
-class LocksModel
+class LocksModel: public QObject, public Blockable
 {
+    Q_OBJECT
     QVector<Lock::State> _storage;
+    bool _is_blocked;
 
 public:
     LocksModel(int size);
+    LocksModel(const LocksModel &obj);
     int size() const { return _storage.size(); }
-    void assign(int x, Lock::State value);
     Lock::State read(int x) const;
+    virtual bool isBlocked() { return _is_blocked; }
+    virtual void block() { _is_blocked = true; }
+    virtual void unblock() { _is_blocked = false; emit locksStateChangedSignal(LocksModel(*this)); }
+
+signals:
+    void locksStateChangedSignal(const LocksModel & model);
+
+public slots:
+    void lockStateChangedSlot(int x, Lock::State state);
 };
 
 QDebug operator <<(QDebug stream, const LocksModel &model);
 
-#endif // LOCKSSTATE_H
+#endif // LOCKSMODEL_H

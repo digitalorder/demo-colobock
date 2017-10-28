@@ -5,14 +5,20 @@ LocksModel::LocksModel(int size)
     _storage.resize(size);
 }
 
-void LocksModel::assign(int x, Lock::State value)
+LocksModel::LocksModel(const LocksModel &obj)
 {
-    _storage[x] = value;
+    _storage = obj._storage;
 }
 
 Lock::State LocksModel::read(int x) const
 {
     return _storage[x];
+}
+
+void LocksModel::lockStateChangedSlot(int x, Lock::State state)
+{
+    qDebug() << "LocksModel: catched update to lock " << x << " to " << state;
+    _storage[x] = state;
 }
 
 QDebug operator <<(QDebug stream, const LocksModel &model)

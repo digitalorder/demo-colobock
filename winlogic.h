@@ -20,7 +20,7 @@ signals:
     void win();
 
 public slots:
-    void newLocksStateSlot(LocksModel state);
+    void newLocksStateSlot(const LocksModel &state);
 };
 
 #endif // WINLOGIC_H
