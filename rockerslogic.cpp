@@ -1,26 +1,34 @@
 #include "rockerslogic.h"
+#include <QDebug>
 
 class ToggleContext
 {
 public:
-    ToggleContext(): x(0), y(0), revertAction(false) {}
-
-    ToggleContext(int x, int y, bool revertAction): x(x), y(y), revertAction(revertAction), distance(1)
+    ToggleContext(int x, int y, ActionSource source, SwitchingTiming timing):
+        x(x), y(y), distance(1), action_source(source), timing(timing)
     {
     }
 
     int x;
     int y;
-    bool revertAction;
     int distance;
+    ActionSource action_source;
+    SwitchingTiming timing;
+
+    friend QDebug operator <<(QDebug os, const ToggleContext & obj);
 };
 
-ToggleContext _toggle_context;
-
-RockersLogic::RockersLogic(RockersMatrix *matrix, QWidget *parent) : QObject(parent)
+QDebug operator <<(QDebug os, const ToggleContext & obj)
 {
-    _matrix = matrix;
-    emitNewRockersStateSignal();
+    os << "ToggleContext(x =" << obj.x << ", y =" << obj.y << ", distance =" << obj.distance << ", source =" << obj.action_source << ", timing =" << obj.timing << ")";
+    return os;
+}
+
+
+ToggleContext _toggle_context(0, 0, ActionSource::MODEL, SwitchingTiming::INSTANT);
+
+RockersLogic::RockersLogic(int size) : _size(size)
+{
     _delay_timer = new QTimer(this);
     _delay_timer->setInterval(300);
     _delay_timer->setSingleShot(true);
@@ -28,90 +36,70 @@ RockersLogic::RockersLogic(RockersMatrix *matrix, QWidget *parent) : QObject(par
     connect(_delay_timer, &QTimer::timeout, this, &RockersLogic::rockerDelayTimeout);
 }
 
-void RockersLogic::emitNewRockersStateSignal()
+int RockersLogic::do_toggling()
 {
-    RockersModel s = getState();
-    emit newRockersStateSignal(s);
-}
-
-RockersModel RockersLogic::getState()
-{
-    RockersModel state(_matrix->size());
-    for (int x = 0; x < _matrix->size(); x++)
-    {
-        for (int y = 0; y < _matrix->size(); y++)
-        {
-            state.assign(x, y, _matrix->rockerState(y, x));
-        }
-    }
-
-    return state;
-}
-
-void RockersLogic::toggleRelatedRockers(int x, int y)
-{
+    qDebug() << "RockersLogic: doing toggling for context " << _toggle_context;
     int toggled_count = 0;
-    if (x - _toggle_context.distance >= 0)
+    if (_toggle_context.x - _toggle_context.distance >= 0)
     {
-        _matrix->toggleRocker(x - _toggle_context.distance, y);
+        emit rockerSwitchedSignal(_toggle_context.x - _toggle_context.distance, _toggle_context.y, ActionSource::LOGIC);
         toggled_count++;
     }
-    if (x + _toggle_context.distance < _matrix->size())
+    if (_toggle_context.x + _toggle_context.distance < _size)
     {
-        _matrix->toggleRocker(x + _toggle_context.distance, y);
+        emit rockerSwitchedSignal(_toggle_context.x + _toggle_context.distance, _toggle_context.y, ActionSource::LOGIC);
         toggled_count++;
     }
-    if (y - _toggle_context.distance >= 0)
+    if (_toggle_context.y - _toggle_context.distance >= 0)
     {
-        _matrix->toggleRocker(x, y - _toggle_context.distance);
+        emit rockerSwitchedSignal(_toggle_context.x, _toggle_context.y - _toggle_context.distance, ActionSource::LOGIC);
         toggled_count++;
     }
-    if (y + _toggle_context.distance < _matrix->size())
+    if (_toggle_context.y + _toggle_context.distance < _size)
     {
-        _matrix->toggleRocker(x, y + _toggle_context.distance);
+        emit rockerSwitchedSignal(_toggle_context.x, _toggle_context.y + _toggle_context.distance, ActionSource::LOGIC);
         toggled_count++;
     }
     _toggle_context.distance++;
+    return toggled_count;
+}
+
+void RockersLogic::toggleRelatedRockers()
+{
+    int toggled_count = 0;
+    do
+    {
+        toggled_count = do_toggling();
+    } while (toggled_count && _toggle_context.timing == SwitchingTiming::INSTANT);
+
     if (toggled_count)
     {
         _delay_timer->start();
     }
     else
     {
-        emit switchingComplete();
-        if (!_toggle_context.revertAction)
-        {
-            emit rockerSwitchedSignal(x, y);
-        }
-        emitNewRockersStateSignal();
+        emit unblockControllers();
     }
 }
 
-void RockersLogic::startSwitching(int x, int y, bool reverseAction)
+void RockersLogic::rockerSwitchedSlot(int x, int y, ActionSource source)
 {
-    _toggle_context = ToggleContext(x, y, reverseAction);
-    emit switchingStarted();
-    _delay_timer->start();
-}
-
-void RockersLogic::rockerSwitchedSlot(int x, int y)
-{
-    startSwitching(x, y, false);
+    qDebug() << "RockersLogic: catched a toggle at (" << x << "," << y << ") from" << source;
+    SwitchingTiming timing = source == ActionSource::MODEL ? SwitchingTiming::INSTANT : SwitchingTiming::DELAYED;
+    _toggle_context = ToggleContext(x, y, source, timing);
+    emit blockControllers();
+    emit rockerSwitchedSignal(_toggle_context.x, _toggle_context.y, source);
+    if (timing == SwitchingTiming::INSTANT)
+    {
+        toggleRelatedRockers();
+    }
+    else
+    {
+        _delay_timer->start();
+    }
 }
 
 void RockersLogic::rockerDelayTimeout()
 {
-    toggleRelatedRockers(_toggle_context.x, _toggle_context.y);
+    toggleRelatedRockers();
 }
-
-void RockersLogic::revertAction(int x, int y)
-{
-    _matrix->toggleRocker(x, y);
-    startSwitching(x, y, true);
-}
-
-//void RockersLogic::generateBoard()
-//{
-//    RockersState s;
-
-//}

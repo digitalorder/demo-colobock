@@ -5,9 +5,10 @@ LocksLogic::LocksLogic(LocksArray *locks, QObject *parent) : QObject(parent), _l
 
 }
 
-void LocksLogic::newRockersStateSlot(RockersModel state)
+void LocksLogic::newRockersStateSlot(const RockersModel &state)
 {
-    LocksState locksState(_locks->size());
+    qDebug() << "LocksLogic: received new model:" << state;
+    LocksModel locksState(_locks->size());
     for (int x = 0; x < _locks->size(); x++)
     {
         Lock::State lockState = Lock::UNLOCKED;

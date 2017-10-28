@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include "locksarray.h"
-#include "locksstate.h"
+#include "locksmodel.h"
 #include "rockersmodel.h"
 
 class LocksLogic : public QObject
@@ -15,10 +15,10 @@ public:
     explicit LocksLogic(LocksArray * locks, QObject *parent = 0);
 
 signals:
-    void newLocksStateSignal(LocksState state);
+    void newLocksStateSignal(LocksModel state);
 
 public slots:
-    void newRockersStateSlot(RockersModel state);
+    void newRockersStateSlot(const RockersModel &state);
 };
 
 #endif // LOCKSLOGIC_H

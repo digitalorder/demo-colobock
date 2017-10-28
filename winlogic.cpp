@@ -7,7 +7,7 @@ WinLogic::WinLogic(QObject *parent) :
 
 }
 
-void WinLogic::newLocksStateSlot(LocksState state)
+void WinLogic::newLocksStateSlot(LocksModel state)
 {
     for (int i = 0; i < state.size(); i++)
     {

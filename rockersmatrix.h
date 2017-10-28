@@ -4,8 +4,10 @@
 #include <QGridLayout>
 #include <QVector>
 #include "rocker.h"
+#include "rockersmodel.h"
+#include "primitivetypes.h"
 
-class RockersMatrix : public QGridLayout
+class RockersMatrix : public QGridLayout, public Blockable
 {
     Q_OBJECT
 
@@ -13,26 +15,25 @@ class RockersMatrix : public QGridLayout
     QVector<Rocker *> _rockerMap;
     Rocker * getRocker(int x, int y);
     Rocker::State generateRockerState();
-
-private slots:
-    void clicked(int x, int y);
+    void generateRockers(const RockersModel &m);
 
 public:
     virtual QSize sizeHint() const;
-    explicit RockersMatrix(int _size = 2, QWidget *parent = 0);
-    void disable();
-    void enable();
+    explicit RockersMatrix(const RockersModel &model, QWidget *parent = 0);
 
     int size() { return _size; }
     void toggleRocker(int x, int y);
     Rocker::State rockerState(int x, int y);
-    void shuffle();
-    void reinit(int matrixSize);
+    virtual bool isBlocked();
+    virtual void block();
+    virtual void unblock();
 
 signals:
-    void clickedSignal(int x, int y);
+    void rockerToggled(int x, int y, ActionSource source);
 
-public slots:
+
+private slots:
+    void rockerSwitchedInterimSlot(int x, int y);
 };
 
 #endif // ROCKERMATRIX_H

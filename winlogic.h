@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include "rockersmodel.h"
-#include "locksstate.h"
+#include "locksmodel.h"
 
 class WinLogic : public QObject
 {
@@ -15,7 +15,7 @@ signals:
     void win();
 
 public slots:
-    void newLocksStateSlot(LocksState state);
+    void newLocksStateSlot(LocksModel state);
 };
 
 #endif // WINLOGIC_H

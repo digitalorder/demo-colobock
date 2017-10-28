@@ -27,7 +27,6 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     rocker.cpp \
     winlogic.cpp \
-    locksstate.cpp \
     lock.cpp \
     locksarray.cpp \
     rockersmatrix.cpp \
@@ -35,12 +34,13 @@ SOURCES += main.cpp\
     rockerslogic.cpp \
     logger.cpp \
     newgamedialog.cpp \
-    rockersmodel.cpp
+    rockersmodel.cpp \
+    locksmodel.cpp \
+    primitivetypes.cpp
 
 HEADERS  += mainwindow.h \
     rocker.h \
     winlogic.h \
-    locksstate.h \
     lock.h \
     locksarray.h \
     rockersmatrix.h \
@@ -48,7 +48,9 @@ HEADERS  += mainwindow.h \
     rockerslogic.h \
     logger.h \
     newgamedialog.h \
-    rockersmodel.h
+    rockersmodel.h \
+    primitivetypes.h \
+    locksmodel.h
 
 RESOURCES += \
     resources.qrc

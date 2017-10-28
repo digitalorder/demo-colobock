@@ -4,7 +4,7 @@
 #include <QGridLayout>
 #include <QVector>
 #include "lock.h"
-#include "locksstate.h"
+#include "locksmodel.h"
 
 class LocksArray : public QGridLayout
 {
@@ -21,7 +21,7 @@ public:
 signals:
 
 public slots:
-    void locksSwitchedSlot(LocksState state);
+    void locksSwitchedSlot(LocksModel state);
 };
 
 #endif // LOCKSARRAY_H

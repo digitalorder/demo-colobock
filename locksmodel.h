@@ -3,12 +3,12 @@
 
 #include "lock.h"
 
-class LocksState
+class LocksModel
 {
     QVector<Lock::State> _storage;
 
 public:
-    LocksState(int size);
+    LocksModel(int size);
     int size() { return _storage.size(); }
     void assign(int x, Lock::State value);
     Lock::State read(int x);

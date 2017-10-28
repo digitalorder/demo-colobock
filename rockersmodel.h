@@ -2,18 +2,36 @@
 #define SWITCHESSTATE_H
 
 #include <QVector>
+#include <QDebug>
 #include "rocker.h"
+#include "primitivetypes.h"
 
-class RockersModel
+class RockersModel: public QObject, public Blockable
 {
+    Q_OBJECT
     int _size;
+    bool _is_blocked;
     QVector<QVector<Rocker::State>> _storage;
     int getIndex(int x, int y);
+    void toggleRocker(int x, int y);
 
 public:
     RockersModel(int size);
-    void assign(int x, int y, Rocker::State value);
-    Rocker::State read(int x, int y);
+    RockersModel(const RockersModel &obj);
+    Rocker::State read(int x, int y) const;
+    int size() const { return _size; }
+    virtual bool isBlocked() { return _is_blocked; }
+    virtual void block() { _is_blocked = true; }
+    virtual void unblock() { _is_blocked = false; emit modelStateUpdated(RockersModel(*this)); }
+
+signals:
+    void modelStateUpdated(const RockersModel & m);
+    void rockerToggleRequest(int x, int y);
+
+public slots:
+    void rockerToggled(int x, int y, ActionSource source);
 };
+
+QDebug operator <<(QDebug stream, const RockersModel &model);
 
 #endif // SWITCHESSTATE_H

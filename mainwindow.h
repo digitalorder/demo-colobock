@@ -5,6 +5,7 @@
 #include <QLabel>
 #include "rockersmatrix.h"
 #include "rockerslogic.h"
+#include "rockersmodel.h"
 #include "locksarray.h"
 #include "lockslogic.h"
 #include "winlogic.h"
@@ -13,7 +14,7 @@
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-
+    RockersModel * _rockers_model;
     RockersMatrix * _rockers;
     RockersLogic * _rockers_logic;
     LocksArray * _locks;

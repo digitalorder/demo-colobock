@@ -7,7 +7,7 @@ LocksArray::LocksArray(int size, QWidget *parent): QGridLayout(parent)
     reinit(size);
 }
 
-void LocksArray::locksSwitchedSlot(LocksState state)
+void LocksArray::locksSwitchedSlot(LocksModel state)
 {
     for (int x = 0; x < _lockMap.size(); x++)
     {

@@ -2,34 +2,28 @@
 #define SWITCHLOGIC_H
 
 #include <QObject>
-#include "rockersmatrix.h"
-#include "rockersmodel.h"
 #include "logger.h"
+#include "primitivetypes.h"
 #include <QTimer>
 
 class RockersLogic : public QObject
 {
     Q_OBJECT
-    RockersMatrix * _matrix;
-    RockersModel getState();
+    int _size;
     QTimer * _delay_timer;
-    void toggleRelatedRockers(int x, int y);
-    void startSwitching(int x, int y, bool reverseAction);
+    void toggleRelatedRockers();
+    int do_toggling();
 
 public:
-    explicit RockersLogic(RockersMatrix *matrix, QWidget * parent = 0);
-    void emitNewRockersStateSignal();
+    explicit RockersLogic(int size);
 
 signals:
-    void newRockersStateSignal(RockersModel state);
-    void rockerSwitchedSignal(int x, int y);
-    void undoUserActionSignal();
-    void switchingStarted();
-    void switchingComplete();
+    void blockControllers();
+    void unblockControllers();
+    void rockerSwitchedSignal(int x, int y, ActionSource source);
 
 public slots:
-    void rockerSwitchedSlot(int x, int y);
-    void revertAction(int x, int y);
+    void rockerSwitchedSlot(int x, int y, ActionSource source);
 
 private slots:
     void rockerDelayTimeout();
