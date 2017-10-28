@@ -51,7 +51,6 @@ void MainWindow::drawWidgets()
     setWindowTitle("Colobock demo by Denis Vasilkovskii");
     resize(_central_widget->size());
     setFixedSize(_central_widget->size());
-    setMaximumSize(QSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX));
 }
 
 MainWindow::MainWindow(QWidget *parent)
@@ -88,7 +87,7 @@ void setButtonIcon(QPushButton * button, const QString & resourcePath)
 void MainWindow::constructLayout()
 {
     _locks = new LocksArray(_matrix_size);
-    _rockers = new RockersMatrix(_matrix_size, this);
+    _rockers = new RockersMatrix(_matrix_size);
     _rockers_model = new RockersModel(_matrix_size);
     _btn_undo = new QPushButton("", this);
     _btn_undo->setEnabled(false);
@@ -125,22 +124,19 @@ void MainWindow::constructLayout()
     connect(_rockers_logic, &RockersLogic::unblockControllers, _rockers, &RockersMatrix::unblock);
     connect(_rockers_logic, &RockersLogic::unblockControllers, _rockers_model, &RockersModel::unblock);
     connect(_rockers_logic, &RockersLogic::rockerSwitchedSignal, _rockers_model, &RockersModel::rockerToggled);
-    connect(_rockers_model, &RockersModel::rockerToggleRequest, _rockers, &RockersMatrix::toggleRocker);
+    connect(_rockers_model, &RockersModel::toggleRockerWithoutLogic, _rockers, &RockersMatrix::toggleRocker);
+    connect(_rockers_model, &RockersModel::toggleRockerWithLogic, _rockers_logic, &RockersLogic::toggleRocker);
     connect(_rockers_model, &RockersModel::modelStateUpdated, _locks_logic, &LocksLogic::newRockersStateSlot);
-//    connect(_rockers_logic, &RockersLogic::rockerSwitchedSignal, _logger, &Logger::newUserAction);
-//    connect(_rockers_logic, &RockersLogic::blockControllers, _rockers, &RockersMatrix::disable);
-//    connect(_rockers_logic, &RockersLogic::blockControllers, _logger, &Logger::disable);
-//    connect(_rockers_logic, &RockersLogic::unblockControllers, _rockers, &RockersMatrix::enable);
-//    connect(_rockers_logic, &RockersLogic::unblockControllers, _logger, &Logger::enable);
+    connect(_rockers, &RockersMatrix::rockerToggled, _logger, &Logger::newUserAction);
     connect(_locks_logic, &LocksLogic::newLocksStateSignal, _locks, &LocksArray::locksSwitchedSlot);
     connect(_locks_logic, &LocksLogic::newLocksStateSignal, _win_logic, &WinLogic::newLocksStateSlot);
     connect(_win_logic, &WinLogic::win, this, &MainWindow::winCatcher);
-//    connect(_btn_undo, &QPushButton::clicked, _logger, &Logger::undoLastUserAction);
-//    connect(_btn_redo, &QPushButton::clicked, _logger, &Logger::redoLastUserAction);
-//    connect(_logger, &Logger::revertAction, _rockers_logic, &RockersLogic::revertAction);
-//    connect(_logger, &Logger::undoAvailablityChanged, _btn_undo, &QPushButton::setEnabled);
-//    connect(_logger, &Logger::redoAvailablityChanged, _btn_redo, &QPushButton::setEnabled);
-//    connect(_logger, &Logger::moveCounterChanged, this, &MainWindow::moveCounterChanged);
+    connect(_btn_undo, &QPushButton::clicked, _logger, &Logger::undoLastUserAction);
+    connect(_btn_redo, &QPushButton::clicked, _logger, &Logger::redoLastUserAction);
+    connect(_logger, &Logger::revertAction, _rockers_model, &RockersModel::rockerToggled);
+    connect(_logger, &Logger::undoAvailablityChanged, _btn_undo, &QPushButton::setEnabled);
+    connect(_logger, &Logger::redoAvailablityChanged, _btn_redo, &QPushButton::setEnabled);
+    connect(_logger, &Logger::moveCounterChanged, this, &MainWindow::moveCounterChanged);
     connect(_btn_new_game, &QPushButton::clicked, this, &MainWindow::newGameRequested);
 
 //    _rockers_logic->emitNewRockersStateSignal();

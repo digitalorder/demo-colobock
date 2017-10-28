@@ -12,7 +12,6 @@ class RockersModel: public QObject, public Blockable
     int _size;
     bool _is_blocked;
     QVector<QVector<Rocker::State>> _storage;
-    int getIndex(int x, int y);
     void toggleRocker(int x, int y);
 
 public:
@@ -26,7 +25,8 @@ public:
 
 signals:
     void modelStateUpdated(const RockersModel & m);
-    void rockerToggleRequest(int x, int y);
+    void toggleRockerWithoutLogic(int x, int y);
+    void toggleRockerWithLogic(int x, int y);
 
 public slots:
     void rockerToggled(int x, int y, ActionSource source);

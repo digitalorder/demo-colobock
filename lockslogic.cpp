@@ -9,10 +9,10 @@ void LocksLogic::newRockersStateSlot(const RockersModel &state)
 {
     qDebug() << "LocksLogic: received new model:" << state;
     LocksModel locksState(_locks->size());
-    for (int x = 0; x < _locks->size(); x++)
+    for (int y = 0; y < _locks->size(); y++)
     {
         Lock::State lockState = Lock::UNLOCKED;
-        for (int y = 0; y < _locks->size(); y++)
+        for (int x = 0; x < _locks->size(); x++)
         {
              if (state.read(x, y))
              {
@@ -20,8 +20,8 @@ void LocksLogic::newRockersStateSlot(const RockersModel &state)
                  break;
              }
         }
-        _locks->setState(x, lockState);
-        locksState.assign(x, lockState);
+        _locks->setState(y, lockState);
+        locksState.assign(y, lockState);
     }
 
     emit newLocksStateSignal(locksState);

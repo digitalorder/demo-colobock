@@ -29,12 +29,15 @@ void Logger::emitNoAvailabilityNotifications()
     emit redoAvailablityChanged(false);
 }
 
-void Logger::newUserAction(int x, int y)
+void Logger::newUserAction(int x, int y, ActionSource source)
 {
-    updateMoveCounter();
-    _move_history.append(UserAction(x, y));
-    _undo_history.clear();
-    emitAvailabilityNotifications();
+    if (source == ActionSource::CONTROLLER)
+    {
+        updateMoveCounter();
+        _move_history.append(UserAction(x, y));
+        _undo_history.clear();
+        emitAvailabilityNotifications();
+    }
 }
 
 void Logger::redoLastUserAction()
@@ -43,7 +46,7 @@ void Logger::redoLastUserAction()
     UserAction a = _undo_history.takeLast();
     _move_history.append(a);
     emitAvailabilityNotifications();
-    emit revertAction(a.x(), a.y());
+    emit revertAction(a.x(), a.y(), ActionSource::UNDO_REDO);
 }
 
 void Logger::undoLastUserAction()
@@ -52,7 +55,7 @@ void Logger::undoLastUserAction()
     UserAction a = _move_history.takeLast();
     _undo_history.append(a);
     emitAvailabilityNotifications();
-    emit revertAction(a.x(), a.y());
+    emit revertAction(a.x(), a.y(), ActionSource::UNDO_REDO);
 }
 
 void Logger::disable()

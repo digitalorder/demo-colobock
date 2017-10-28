@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QVector>
 #include <iostream>
+#include "primitivetypes.h"
 
 class UserAction
 {
@@ -34,13 +35,13 @@ public:
     explicit Logger(QObject *parent = 0);
 
 signals:
-    void revertAction(int x, int y);
+    void revertAction(int x, int y, ActionSource source);
     void undoAvailablityChanged(bool enabled);
     void redoAvailablityChanged(bool enabled);
     void moveCounterChanged(int value);
 
 public slots:
-    void newUserAction(int x, int y);
+    void newUserAction(int x, int y, ActionSource source);
     void redoLastUserAction();
     void undoLastUserAction();
     void disable();

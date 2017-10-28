@@ -88,7 +88,10 @@ void RockersLogic::rockerSwitchedSlot(int x, int y, ActionSource source)
     SwitchingTiming timing = source == ActionSource::MODEL ? SwitchingTiming::INSTANT : SwitchingTiming::DELAYED;
     _toggle_context = ToggleContext(x, y, source, timing);
     emit blockControllers();
-    emit rockerSwitchedSignal(_toggle_context.x, _toggle_context.y, source);
+    if (source != ActionSource::UNDO_REDO)
+    {
+        emit rockerSwitchedSignal(_toggle_context.x, _toggle_context.y, source);
+    }
     if (timing == SwitchingTiming::INSTANT)
     {
         toggleRelatedRockers();
@@ -102,4 +105,9 @@ void RockersLogic::rockerSwitchedSlot(int x, int y, ActionSource source)
 void RockersLogic::rockerDelayTimeout()
 {
     toggleRelatedRockers();
+}
+
+void RockersLogic::toggleRocker(int x, int y)
+{
+    rockerSwitchedSlot(x, y, ActionSource::UNDO_REDO);
 }
