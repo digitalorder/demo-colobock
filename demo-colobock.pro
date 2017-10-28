@@ -24,33 +24,34 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
-    rocker.cpp \
-    winlogic.cpp \
-    lock.cpp \
-    locksarray.cpp \
-    rockersmatrix.cpp \
-    lockslogic.cpp \
-    rockerslogic.cpp \
-    logger.cpp \
-    newgamedialog.cpp \
-    rockersmodel.cpp \
-    locksmodel.cpp \
-    primitivetypes.cpp
+    Dialogs\mainwindow.cpp \
+    Dialogs\newgamedialog.cpp \
+    Models/rockersmodel.cpp \
+    Models/locksmodel.cpp \
+    Models/logger.cpp \
+    ViewControllers/rocker.cpp \
+    ViewControllers/rockersmatrix.cpp \
+    ViewControllers/lock.cpp \
+    ViewControllers/locksarray.cpp \
+    Logic/rockerslogic.cpp \
+    Logic/lockslogic.cpp \
+    Logic/winlogic.cpp \
+    Shared/primitivetypes.cpp
 
-HEADERS  += mainwindow.h \
-    rocker.h \
-    winlogic.h \
-    lock.h \
-    locksarray.h \
-    rockersmatrix.h \
-    lockslogic.h \
-    rockerslogic.h \
-    logger.h \
-    newgamedialog.h \
-    rockersmodel.h \
-    primitivetypes.h \
-    locksmodel.h
+HEADERS  += \
+    Dialogs\mainwindow.h \
+    Dialogs\newgamedialog.h \
+    Models/rockersmodel.h \
+    Models/locksmodel.h \
+    Models/logger.h \
+    ViewControllers/rocker.h \
+    ViewControllers/rockersmatrix.h \
+    ViewControllers/lock.h \
+    ViewControllers/locksarray.h \
+    Logic/rockerslogic.h \
+    Logic/lockslogic.h \
+    Logic/winlogic.h \
+    Shared/primitivetypes.h
 
 RESOURCES += \
     resources.qrc
