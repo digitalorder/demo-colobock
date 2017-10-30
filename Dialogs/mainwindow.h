@@ -25,7 +25,8 @@ class MainWindow : public QMainWindow
     Logger * _logger;
     QPushButton * _btn_undo;
     QPushButton * _btn_redo;
-    QPushButton * _btn_new_game;
+    QPushButton * _btn_config;
+    QPushButton * _btn_info;
     QLabel * _lbl_move_counter;
     QWidget * _central_widget;
     int _matrix_size;
@@ -43,7 +44,8 @@ public:
 public slots:
     void winCatcher();
     void moveCounterChanged(int value);
-    void newGameRequested();
+    void configBtnClicked();
+    void infoBtnClicked();
 };
 
 #endif // MAINWINDOW_H

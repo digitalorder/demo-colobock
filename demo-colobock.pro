@@ -30,7 +30,8 @@ INCLUDEPATH += Dialogs \
 
 SOURCES += main.cpp\
     Dialogs/mainwindow.cpp \
-    Dialogs/newgamedialog.cpp \
+    Dialogs/configdialog.cpp \
+    Dialogs/infodialog.cpp \
     Models/rockersmodel.cpp \
     Models/locksmodel.cpp \
     Models/logger.cpp \
@@ -45,7 +46,8 @@ SOURCES += main.cpp\
 
 HEADERS  += \
     Dialogs/mainwindow.h \
-    Dialogs/newgamedialog.h \
+    Dialogs/configdialog.h \
+    Dialogs/infodialog.h \
     Models/rockersmodel.h \
     Models/locksmodel.h \
     Models/logger.h \

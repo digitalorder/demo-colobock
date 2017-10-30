@@ -1,19 +1,19 @@
-#ifndef NEWGAMEDIALOG_H
-#define NEWGAMEDIALOG_H
+#ifndef CONFIGDIALOG_H
+#define CONFIGDIALOG_H
 
 #include <QDialog>
 #include <QPushButton>
 #include <QLineEdit>
 
-class NewGameDialog : public QDialog
+class ConfigDialog : public QDialog
 {
     QPushButton * _btn_ok;
     QPushButton * _btn_cancel;
     QLineEdit * _ledit_matrix_size;
 
 public:
-    NewGameDialog(int matrixSize);
+    ConfigDialog(int matrixSize);
     int matrixSize();
 };
 
-#endif // NEWGAMEDIALOG_H
+#endif // CONFIGDIALOG_H

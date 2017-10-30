@@ -7,5 +7,7 @@
         <file>resources/Redo.jpg</file>
         <file>resources/Undo.jpg</file>
         <file>resources/Config.jpg</file>
+        <file>resources/Info.jpg</file>
+        <file>resources/info.txt</file>
     </qresource>
 </RCC>

@@ -4,7 +4,8 @@
 #include <QGridLayout>
 #include <QSpacerItem>
 #include <QMessageBox>
-#include "newgamedialog.h"
+#include "configdialog.h"
+#include "infodialog.h"
 
 static QHBoxLayout *buttonsLayout;
 static QHBoxLayout *locksLayout;
@@ -28,7 +29,8 @@ void MainWindow::drawWidgets()
     buttonsLayout->addSpacerItem(new QSpacerItem(2, 0, QSizePolicy::Expanding));
     buttonsLayout->addWidget(_lbl_move_counter);
     buttonsLayout->addSpacerItem(new QSpacerItem(2, 0, QSizePolicy::Expanding));
-    buttonsLayout->addWidget(_btn_new_game);
+    buttonsLayout->addWidget(_btn_config);
+    buttonsLayout->addWidget(_btn_info);
     buttonsLayout->setMargin(0);
 
     locksLayout->addSpacerItem(new QSpacerItem(2, 0, QSizePolicy::Expanding));
@@ -65,7 +67,7 @@ void MainWindow::deleteLayout()
     delete _rockers;
     delete _btn_undo;
     delete _btn_redo;
-    delete _btn_new_game;
+    delete _btn_config;
     delete _lbl_move_counter;
     delete _central_widget;
 
@@ -96,7 +98,8 @@ void MainWindow::constructLayout()
     _btn_undo->setEnabled(false);
     _btn_redo = new QPushButton("", this);
     _btn_redo->setEnabled(false);
-    _btn_new_game = new QPushButton("", this);
+    _btn_config = new QPushButton("", this);
+    _btn_info = new QPushButton("", this);
     _lbl_move_counter = new QLabel(QString("Moves: 0   "), this);
     _central_widget = new QWidget(this);
 
@@ -115,7 +118,8 @@ void MainWindow::constructLayout()
 
     setButtonIcon(_btn_undo, QString(":/images/resources/Undo.jpg"));
     setButtonIcon(_btn_redo, QString(":/images/resources/Redo.jpg"));
-    setButtonIcon(_btn_new_game, QString(":/images/resources/Config.jpg"));
+    setButtonIcon(_btn_config, QString(":/images/resources/Config.jpg"));
+    setButtonIcon(_btn_info, QString(":/images/resources/Info.jpg"));
 
     drawWidgets();
 
@@ -143,7 +147,8 @@ void MainWindow::constructLayout()
     connect(_logger, &Logger::undoAvailablityChanged, _btn_undo, &QPushButton::setEnabled);
     connect(_logger, &Logger::redoAvailablityChanged, _btn_redo, &QPushButton::setEnabled);
     connect(_logger, &Logger::moveCounterChanged, this, &MainWindow::moveCounterChanged);
-    connect(_btn_new_game, &QPushButton::clicked, this, &MainWindow::newGameRequested);
+    connect(_btn_config, &QPushButton::clicked, this, &MainWindow::configBtnClicked);
+    connect(_btn_info, &QPushButton::clicked, this, &MainWindow::infoBtnClicked);
 }
 
 MainWindow::~MainWindow()
@@ -183,9 +188,9 @@ void MainWindow::moveCounterChanged(int value)
     _lbl_move_counter->setText(QString("Moves: %1").arg(value));
 }
 
-void MainWindow::newGameRequested()
+void MainWindow::configBtnClicked()
 {
-    NewGameDialog dialog(_matrix_size);
+    ConfigDialog dialog(_matrix_size);
     dialog.setModal(true);
     int dialogResult = dialog.exec();
     if (dialogResult == QDialog::Accepted)
@@ -193,4 +198,11 @@ void MainWindow::newGameRequested()
         _matrix_size = dialog.matrixSize();
         restartLayout();
     }
+}
+
+void MainWindow::infoBtnClicked()
+{
+    InfoDialog dialog;
+    dialog.setModal(true);
+    dialog.exec();
 }

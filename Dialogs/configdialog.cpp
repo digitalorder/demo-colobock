@@ -1,4 +1,4 @@
-#include "newgamedialog.h"
+#include "configdialog.h"
 #include <QGroupBox>
 #include <QPushButton>
 #include <QLabel>
@@ -6,7 +6,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
-NewGameDialog::NewGameDialog(int matrixSize)
+ConfigDialog::ConfigDialog(int matrixSize)
 {
     _btn_ok = new QPushButton("OK");
     _btn_cancel = new QPushButton("Cancel");
@@ -41,7 +41,7 @@ NewGameDialog::NewGameDialog(int matrixSize)
     connect(_btn_cancel, &QPushButton::clicked, this, &QDialog::reject);
 }
 
-int NewGameDialog::matrixSize()
+int ConfigDialog::matrixSize()
 {
     bool success = false;
     int result = _ledit_matrix_size->text().toInt(&success);

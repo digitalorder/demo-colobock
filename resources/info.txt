@@ -1,0 +1,5 @@
+You obviously noticed a square matrix of rocker switches in the main window. These rockers can be put either in horizontal or vertical position. And for every column of the rockers there is a lock above that will be unlocked when all the controllers are put into horizontal position. There is one obstacle though. When you toggle rocker state, all other rockers on the same row and column also toggle their state. You goal, as you might expect, is to unlock all the locks. No worries, every game has a solution! 
+
+To make things a little bit easier you can use “Back” and “Forth” buttons to try things out. They work as you expect.
+
+Good luck!
