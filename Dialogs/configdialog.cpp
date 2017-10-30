@@ -6,6 +6,10 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
+const int MINIMUM_MATRIX_SIZE = 2;
+const int MAXIMUM_MATRIX_SIZE = 12;
+const int DEFAULT_MATRIX_SIZE = 4;
+
 ConfigDialog::ConfigDialog(int matrixSize)
 {
     _btn_ok = new QPushButton("OK");
@@ -47,17 +51,11 @@ int ConfigDialog::matrixSize()
     int result = _ledit_matrix_size->text().toInt(&success);
     if (!success)
     {
-        return 4;
+        return DEFAULT_MATRIX_SIZE;
     }
 
-    if (result < 2)
-    {
-        return 2;
-    }
-    if (result > 12)
-    {
-        return 12;
-    }
+    result = std::max(result, MINIMUM_MATRIX_SIZE);
+    result = std::min(result, MAXIMUM_MATRIX_SIZE);
 
     return result;
 }

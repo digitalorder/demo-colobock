@@ -19,7 +19,6 @@ InfoDialog::InfoDialog()
     if (!infoFile.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         qDebug() << "Unable to open file: " << infoFile.fileName() << " besause of error " << infoFile.errorString() << endl;
-
         return;
     }
 

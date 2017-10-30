@@ -7,11 +7,6 @@
 #include "configdialog.h"
 #include "infodialog.h"
 
-static QHBoxLayout *buttonsLayout;
-static QHBoxLayout *locksLayout;
-static QHBoxLayout *rockersLayout;
-static QVBoxLayout *mainLayout;
-
 void MainWindow::restartLayout()
 {
     this->hide();
@@ -24,6 +19,7 @@ void MainWindow::restartLayout()
 
 void MainWindow::drawWidgets()
 {
+    QHBoxLayout *buttonsLayout = new QHBoxLayout();
     buttonsLayout->addWidget(_btn_undo);
     buttonsLayout->addWidget(_btn_redo);
     buttonsLayout->addSpacerItem(new QSpacerItem(2, 0, QSizePolicy::Expanding));
@@ -33,16 +29,19 @@ void MainWindow::drawWidgets()
     buttonsLayout->addWidget(_btn_info);
     buttonsLayout->setMargin(0);
 
+    QHBoxLayout *locksLayout = new QHBoxLayout();
     locksLayout->addSpacerItem(new QSpacerItem(2, 0, QSizePolicy::Expanding));
     locksLayout->addLayout(_locks);
     locksLayout->setMargin(0);
     locksLayout->addSpacerItem(new QSpacerItem(2, 0, QSizePolicy::Expanding));
 
+    QHBoxLayout *rockersLayout = new QHBoxLayout();
     rockersLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
     rockersLayout->addLayout(_rockers);
     rockersLayout->setMargin(0);
     rockersLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
 
+    QVBoxLayout *mainLayout = new QVBoxLayout();
     mainLayout->addLayout(buttonsLayout);
     mainLayout->addLayout(locksLayout);
     mainLayout->addLayout(rockersLayout);
@@ -106,11 +105,6 @@ void MainWindow::constructLayout()
     _win_logic = new WinLogic(this);
     _logger = new Logger(this);
 
-    buttonsLayout = new QHBoxLayout();
-    locksLayout = new QHBoxLayout();
-    rockersLayout = new QHBoxLayout();
-    mainLayout = new QVBoxLayout();
-
     QPalette pal = palette();
     pal.setColor(QPalette::Background, QColor(185, 180, 186));
     _central_widget->setAutoFillBackground(true);
@@ -153,7 +147,6 @@ void MainWindow::constructLayout()
 
 MainWindow::~MainWindow()
 {
-
 }
 
 void MainWindow::showEvent(QShowEvent *)
@@ -167,10 +160,9 @@ void MainWindow::showEvent(QShowEvent *)
 void MainWindow::winCatcher()
 {
     QMessageBox msgBox;
-    msgBox.setText("Cool! You was able to solve this puzzle. Would you like to try again?");
     QAbstractButton *btnYes = msgBox.addButton("I wanna more!", QMessageBox::YesRole);
+    msgBox.setText("Cool! You was able to solve this puzzle. Would you like to try again?");
     msgBox.addButton("That's enough!", QMessageBox::NoRole);
-
     msgBox.exec();
 
     if (msgBox.clickedButton()==btnYes)

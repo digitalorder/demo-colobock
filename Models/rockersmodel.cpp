@@ -5,10 +5,7 @@ RockersModel::RockersModel(int size): _size(size), _is_blocked(false)
 {
     qsrand(static_cast<quint64>(QTime::currentTime().msecsSinceStartOfDay()));
     _storage.resize(size);
-    for (int i = 0; i < size; i++)
-    {
-        _storage[i].resize(size);
-    }
+    std::for_each(_storage.begin(), _storage.end(), [size](QVector<Rocker::State> &s) { s.resize(size); } );
 }
 
 RockersModel::RockersModel(const RockersModel &obj)

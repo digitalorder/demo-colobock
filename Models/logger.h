@@ -31,6 +31,7 @@ class Logger : public QObject, public Blockable
     void resetMoveCounter();
     void emitAvailabilityNotifications();
     void emitNoAvailabilityNotifications();
+    void moveAction(QVector<UserAction> &to, QVector<UserAction> &from);
 
 public:
     explicit Logger(QObject *parent = 0);

@@ -40,22 +40,23 @@ void Logger::newUserAction(int x, int y, ActionSource source)
     }
 }
 
-void Logger::redoLastUserAction()
+void Logger::moveAction(QVector<UserAction> &to, QVector<UserAction> &from)
 {
     updateMoveCounter();
-    UserAction a = _undo_history.takeLast();
-    _move_history.append(a);
+    UserAction a = from.takeLast();
+    to.append(a);
     emitAvailabilityNotifications();
     emit revertAction(a.x(), a.y(), ActionSource::UNDO_REDO);
 }
 
+void Logger::redoLastUserAction()
+{
+    moveAction(_move_history, _undo_history);
+}
+
 void Logger::undoLastUserAction()
 {
-    updateMoveCounter();
-    UserAction a = _move_history.takeLast();
-    _undo_history.append(a);
-    emitAvailabilityNotifications();
-    emit revertAction(a.x(), a.y(), ActionSource::UNDO_REDO);
+    moveAction(_undo_history, _move_history);
 }
 
 void Logger::disable()

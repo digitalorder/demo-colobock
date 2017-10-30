@@ -24,18 +24,12 @@ RockersMatrix::RockersMatrix(const RockersModel &model, QWidget *parent) : QGrid
 
 void RockersMatrix::block()
 {
-    for (auto r = _rockerMap.begin(); r != _rockerMap.end(); ++r)
-    {
-        (*r)->setEnabled(false);
-    }
+    std::for_each(_rockerMap.begin(), _rockerMap.end(), [](Rocker * r){ r->setEnabled(false); });
 }
 
 void RockersMatrix::unblock()
 {
-    for (auto r = _rockerMap.begin(); r != _rockerMap.end(); ++r)
-    {
-        (*r)->setEnabled(true);
-    }
+    std::for_each(_rockerMap.begin(), _rockerMap.end(), [](Rocker * r){ r->setEnabled(true); });
 }
 
 bool RockersMatrix::isBlocked()
@@ -43,14 +37,6 @@ bool RockersMatrix::isBlocked()
     // todo
     return false;
 }
-
-//void RockersMatrix::shuffle()
-//{
-//    for (auto r = _rockerMap.begin(); r != _rockerMap.end(); ++r)
-//    {
-//        (*r)->setState(generateRockerState());
-//    }
-//}
 
 Rocker * RockersMatrix::getRocker(int x, int y)
 {
