@@ -24,7 +24,6 @@ QDebug operator <<(QDebug os, const ActionSource& source)
     return os;
 }
 
-
 QDebug operator <<(QDebug os, const SwitchingTiming &timing)
 {
     switch (timing)

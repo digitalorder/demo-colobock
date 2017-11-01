@@ -2,10 +2,10 @@
 
 Lock::Lock(int x, QWidget *parent) : QPushButton(parent), _x(x)
 {
-    QIcon *ico = new QIcon();
-    ico->addPixmap(QPixmap(":/images/resources/Locked.jpg"), QIcon::Normal, QIcon::On);
-    ico->addPixmap(QPixmap(":/images/resources/Unlocked.jpg"),QIcon::Normal,QIcon::Off);
-    setIcon(*ico);
+    QIcon ico = QIcon();
+    ico.addPixmap(QPixmap(":/images/resources/Locked.jpg"), QIcon::Normal, QIcon::On);
+    ico.addPixmap(QPixmap(":/images/resources/Unlocked.jpg"), QIcon::Normal, QIcon::Off);
+    setIcon(ico);
     setIconSize(QSize(20, 32));
     setEnabled(false);
     setCheckable(true);

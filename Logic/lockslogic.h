@@ -12,7 +12,7 @@ class LocksLogic : public QObject
     bool _is_blocked;
 
 public:
-    explicit LocksLogic(int size, QObject *parent = 0);
+    explicit LocksLogic(int size);
 
 signals:
     void blockControllers();

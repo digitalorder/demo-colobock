@@ -34,7 +34,7 @@ class Logger : public QObject, public Blockable
     void moveAction(QVector<UserAction> &to, QVector<UserAction> &from);
 
 public:
-    explicit Logger(QObject *parent = 0);
+    explicit Logger();
     virtual bool isBlocked() { return _is_blocked; }
     virtual void block() { _is_blocked = true; emitNoAvailabilityNotifications(); }
     virtual void unblock() { _is_blocked = false; emitAvailabilityNotifications(); }

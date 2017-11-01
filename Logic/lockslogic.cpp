@@ -1,6 +1,6 @@
 #include "lockslogic.h"
 
-LocksLogic::LocksLogic(int size, QObject *parent) : QObject(parent), _size(size)
+LocksLogic::LocksLogic(int size) : _size(size)
 {
 
 }

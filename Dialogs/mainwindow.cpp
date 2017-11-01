@@ -11,6 +11,8 @@ void MainWindow::restartLayout()
 {
     this->hide();
     setMaximumSize(QSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX));
+    // this is a workaround because IDK how to delete all those empty widgets in
+    // grid layout when it is reduced from say 5x5 to 4x4
     deleteLayout();
     constructLayout();
     setFixedSize(QSize(size()));
@@ -19,34 +21,44 @@ void MainWindow::restartLayout()
 
 void MainWindow::drawWidgets()
 {
-    QHBoxLayout *buttonsLayout = new QHBoxLayout();
-    buttonsLayout->addWidget(_btn_undo);
-    buttonsLayout->addWidget(_btn_redo);
-    buttonsLayout->addSpacerItem(new QSpacerItem(2, 0, QSizePolicy::Expanding));
-    buttonsLayout->addWidget(_lbl_move_counter);
-    buttonsLayout->addSpacerItem(new QSpacerItem(2, 0, QSizePolicy::Expanding));
-    buttonsLayout->addWidget(_btn_config);
-    buttonsLayout->addWidget(_btn_info);
-    buttonsLayout->setMargin(0);
+    QHBoxLayout * loButtons = new QHBoxLayout();
+    loButtons->addWidget(_btn_undo);
+    loButtons->addWidget(_btn_redo);
+    loButtons->addSpacerItem(new QSpacerItem(2, 0, QSizePolicy::Expanding));
+    loButtons->addWidget(_lbl_move_counter);
+    loButtons->addSpacerItem(new QSpacerItem(2, 0, QSizePolicy::Expanding));
+    loButtons->addWidget(_btn_config);
+    loButtons->addWidget(_btn_info);
+    loButtons->setMargin(0);
 
-    QHBoxLayout *locksLayout = new QHBoxLayout();
-    locksLayout->addSpacerItem(new QSpacerItem(2, 0, QSizePolicy::Expanding));
-    locksLayout->addLayout(_locks);
-    locksLayout->setMargin(0);
-    locksLayout->addSpacerItem(new QSpacerItem(2, 0, QSizePolicy::Expanding));
+    QHBoxLayout * loLocks = new QHBoxLayout();
+    loLocks->addSpacerItem(new QSpacerItem(2, 0, QSizePolicy::Expanding));
+    loLocks->addLayout(_locks);
+    loLocks->setMargin(0);
+    loLocks->addSpacerItem(new QSpacerItem(2, 0, QSizePolicy::Expanding));
 
-    QHBoxLayout *rockersLayout = new QHBoxLayout();
-    rockersLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
-    rockersLayout->addLayout(_rockers);
-    rockersLayout->setMargin(0);
-    rockersLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
+    QHBoxLayout * loRockers = new QHBoxLayout();
+    loRockers->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
+    loRockers->addLayout(_rockers);
+    loRockers->setMargin(0);
+    loRockers->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
 
-    QVBoxLayout *mainLayout = new QVBoxLayout();
-    mainLayout->addLayout(buttonsLayout);
-    mainLayout->addLayout(locksLayout);
-    mainLayout->addLayout(rockersLayout);
+    QVBoxLayout * loMain = new QVBoxLayout();
+    loMain->addLayout(loButtons);
+    loMain->addLayout( loLocks);
+    loMain->addLayout(loRockers);
 
-    _central_widget->setLayout(mainLayout);
+    QPalette pal = palette();
+    pal.setColor(QPalette::Background, QColor(185, 180, 186));
+    _central_widget->setAutoFillBackground(true);
+    _central_widget->setPalette(pal);
+
+    setButtonIcon(_btn_undo, QString(":/images/resources/Undo.jpg"));
+    setButtonIcon(_btn_redo, QString(":/images/resources/Redo.jpg"));
+    setButtonIcon(_btn_config, QString(":/images/resources/Config.jpg"));
+    setButtonIcon(_btn_info, QString(":/images/resources/Info.jpg"));
+
+    _central_widget->setLayout(loMain);
     _central_widget->adjustSize();
 
     setWindowTitle("Colobock demo by Denis Vasilkovskii");
@@ -60,23 +72,22 @@ MainWindow::MainWindow(QWidget *parent)
     constructLayout();
 }
 
-void MainWindow::deleteLayout()
+void MainWindow::deleteParentless()
 {
-    delete _locks;
-    delete _rockers;
-    delete _btn_undo;
-    delete _btn_redo;
-    delete _btn_config;
-    delete _lbl_move_counter;
-    delete _central_widget;
-
+    // following objects doesn't have a representation and therefore
+    // should be deleted manually
     delete _rockers_logic;
     delete _locks_logic;
     delete _win_logic;
     delete _logger;
 }
+void MainWindow::deleteLayout()
+{
+    delete _central_widget;
+    deleteParentless();
+}
 
-void setButtonIcon(QPushButton * button, const QString & resourcePath)
+void MainWindow::setButtonIcon(QPushButton * button, const QString & resourcePath)
 {
     QIcon ico;
     ico.addPixmap(QPixmap(resourcePath), QIcon::Normal, QIcon::On);
@@ -93,6 +104,7 @@ void MainWindow::constructLayout()
     _rockers = new RockersMatrix(_matrix_size);
     _rockers_model = new RockersModel(_matrix_size);
     _rockers_logic = new RockersLogic(_matrix_size);
+
     _btn_undo = new QPushButton("", this);
     _btn_undo->setEnabled(false);
     _btn_redo = new QPushButton("", this);
@@ -102,18 +114,8 @@ void MainWindow::constructLayout()
     _lbl_move_counter = new QLabel(QString("Moves: 0   "), this);
     _central_widget = new QWidget(this);
 
-    _win_logic = new WinLogic(this);
-    _logger = new Logger(this);
-
-    QPalette pal = palette();
-    pal.setColor(QPalette::Background, QColor(185, 180, 186));
-    _central_widget->setAutoFillBackground(true);
-    _central_widget->setPalette(pal);
-
-    setButtonIcon(_btn_undo, QString(":/images/resources/Undo.jpg"));
-    setButtonIcon(_btn_redo, QString(":/images/resources/Redo.jpg"));
-    setButtonIcon(_btn_config, QString(":/images/resources/Config.jpg"));
-    setButtonIcon(_btn_info, QString(":/images/resources/Info.jpg"));
+    _win_logic = new WinLogic();
+    _logger = new Logger();
 
     drawWidgets();
 
@@ -147,11 +149,11 @@ void MainWindow::constructLayout()
 
 MainWindow::~MainWindow()
 {
+    deleteParentless();
 }
 
 void MainWindow::showEvent(QShowEvent *)
 {
-    qDebug() << "Window has been loaded";
     _win_logic->block();
     _rockers_model->shuffle();
     _win_logic->unblock();

@@ -35,6 +35,8 @@ class MainWindow : public QMainWindow
     void deleteLayout();
     void constructLayout();
     void showEvent(QShowEvent *);
+    void setButtonIcon(QPushButton *button, const QString &resourcePath);
+    void deleteParentless();
 
 public:
     MainWindow(QWidget *parent = 0);

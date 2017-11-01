@@ -37,12 +37,12 @@ void Rocker::toggleState()
 
 Rocker::Rocker(int x, int y, State state, QWidget *parent) : QPushButton(parent), _x(x), _y(y)
 {
-    QIcon *ico = new QIcon();
-    ico->addPixmap(QPixmap(":/images/resources/Vertical.jpg"), QIcon::Normal, QIcon::On);
-    ico->addPixmap(QPixmap(":/images/resources/Vertical.jpg"), QIcon::Disabled, QIcon::On);
-    ico->addPixmap(QPixmap(":/images/resources/Horizontal.jpg"),QIcon::Normal,QIcon::Off);
-    ico->addPixmap(QPixmap(":/images/resources/Horizontal.jpg"),QIcon::Disabled,QIcon::Off);
-    setIcon(*ico);
+    QIcon ico = QIcon();
+    ico.addPixmap(QPixmap(":/images/resources/Vertical.jpg"), QIcon::Normal, QIcon::On);
+    ico.addPixmap(QPixmap(":/images/resources/Vertical.jpg"), QIcon::Disabled, QIcon::On);
+    ico.addPixmap(QPixmap(":/images/resources/Horizontal.jpg"),QIcon::Normal,QIcon::Off);
+    ico.addPixmap(QPixmap(":/images/resources/Horizontal.jpg"),QIcon::Disabled,QIcon::Off);
+    setIcon(ico);
     setIconSize(QSize(32, 32));
     setFixedSize(QSize(32, 32));
     setCheckable(true);

@@ -1,8 +1,7 @@
 #include "winlogic.h"
 #include "lock.h"
 
-WinLogic::WinLogic(QObject *parent) :
-    QObject(parent), _is_blocked(false)
+WinLogic::WinLogic(): _is_blocked(false)
 {
 
 }

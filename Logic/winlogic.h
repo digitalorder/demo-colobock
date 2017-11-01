@@ -11,7 +11,7 @@ class WinLogic : public QObject, public Blockable
     bool _is_blocked;
 
 public:
-    explicit WinLogic(QObject *parent = 0);
+    explicit WinLogic();
     virtual bool isBlocked() { return _is_blocked; }
     virtual void block() { _is_blocked = true; }
     virtual void unblock() { _is_blocked = false; }

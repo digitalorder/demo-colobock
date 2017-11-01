@@ -11,28 +11,14 @@
 InfoDialog::InfoDialog()
 {
     _btn_ok = new QPushButton("Oh, I see!");
-    _lbl_info = new QLabel("");
-    QResource infoText(":/images/resources/info.txt");
-
-    QFile infoFile(infoText.absoluteFilePath());
-
-    if (!infoFile.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        qDebug() << "Unable to open file: " << infoFile.fileName() << " besause of error " << infoFile.errorString() << endl;
-        return;
-    }
-
-    QTextStream in(&infoFile);
-
-    QString content = in.readAll();
-    _lbl_info->setText(content);
+    _lbl_info = new QLabel(readInfoFromFile(":/images/resources/info.txt"));
     _lbl_info->setWordWrap(true);
     _lbl_info->setFixedWidth(370);
 
     QHBoxLayout *textLayout = new QHBoxLayout();
     textLayout->addWidget(_lbl_info, 0, Qt::AlignLeft);
 
-    QHBoxLayout * buttonsLayout = new QHBoxLayout();
+    QHBoxLayout *buttonsLayout = new QHBoxLayout();
     buttonsLayout->addSpacerItem(new QSpacerItem(1, 0, QSizePolicy::Expanding));
     buttonsLayout->addWidget(_btn_ok, 0, Qt::AlignRight);
 
@@ -50,4 +36,21 @@ InfoDialog::InfoDialog()
     setFixedSize(QSize(size()));
 
     connect(_btn_ok, &QPushButton::clicked, this, &QDialog::accept);
+}
+
+QString InfoDialog::readInfoFromFile(const QString &f)
+{
+    QResource infoText(f);
+
+    QFile infoFile(infoText.absoluteFilePath());
+
+    if (!infoFile.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        return QString("Error loading info: " + infoFile.errorString());
+    }
+
+    QTextStream in(&infoFile);
+
+    // QString is moveable so this is both efficient and readable
+    return in.readAll();
 }
