@@ -30,6 +30,8 @@ class MainWindow : public QMainWindow
     QLabel * _lbl_move_counter;
     QWidget * _central_widget;
     int _matrix_size;
+    const int SEED_IS_NOT_SET = INT32_MAX;
+    int _seed;
     void restartLayout();
     void drawWidgets();
     void deleteLayout();

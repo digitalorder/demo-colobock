@@ -7,11 +7,14 @@
 class ConfigDialog : public QDialog
 {
     QLineEdit * _ledit_matrix_size;
+    QLineEdit * _ledit_seed;
     int _matrix_size;
+    int _seed;
 public:
-    ConfigDialog(int matrixSize);
+    ConfigDialog(int matrixSize, int seed);
     ~ConfigDialog();
     int matrixSize() { return _matrix_size; }
+    int seed() { return _seed; }
 
 private slots:
     void accepted();

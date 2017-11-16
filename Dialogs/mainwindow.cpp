@@ -4,6 +4,7 @@
 #include <QGridLayout>
 #include <QSpacerItem>
 #include <QMessageBox>
+#include <QTime>
 #include "configdialog.h"
 #include "infodialog.h"
 
@@ -61,13 +62,12 @@ void MainWindow::drawWidgets()
     _central_widget->setLayout(loMain);
     _central_widget->adjustSize();
 
-    setWindowTitle("Colobock demo by Denis Vasilkovskii");
     resize(_central_widget->size());
     setFixedSize(_central_widget->size());
 }
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), _matrix_size(4)
+    : QMainWindow(parent), _matrix_size(4), _seed(SEED_IS_NOT_SET)
 {
     constructLayout();
 }
@@ -155,8 +155,13 @@ MainWindow::~MainWindow()
 void MainWindow::showEvent(QShowEvent *)
 {
     _win_logic->block();
-    _rockers_model->shuffle();
+    if (_seed == SEED_IS_NOT_SET) {
+        qsrand(static_cast<quint64>(QTime::currentTime().msecsSinceStartOfDay()));
+        _seed = qrand();
+    }
+    _rockers_model->shuffle(_seed);
     _win_logic->unblock();
+    setWindowTitle(QString("Colobock (seed#%1)").arg(_seed));
 }
 
 void MainWindow::winCatcher()
@@ -184,12 +189,13 @@ void MainWindow::moveCounterChanged(int value)
 
 void MainWindow::configBtnClicked()
 {
-    ConfigDialog dialog(_matrix_size);
+    ConfigDialog dialog(_matrix_size, _seed);
     dialog.setModal(true);
     int dialogResult = dialog.exec();
     if (dialogResult == QDialog::Accepted)
     {
         _matrix_size = dialog.matrixSize();
+        _seed = dialog.seed();
         restartLayout();
     }
 }

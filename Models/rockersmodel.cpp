@@ -3,7 +3,6 @@
 
 RockersModel::RockersModel(int size): _size(size), _is_blocked(false)
 {
-    qsrand(static_cast<quint64>(QTime::currentTime().msecsSinceStartOfDay()));
     _storage.resize(size);
     std::for_each(_storage.begin(), _storage.end(), [size](QVector<Rocker::State> &s) { s.resize(size); } );
 }
@@ -35,8 +34,9 @@ bool RockersModel::allRockersAreHorizontal()
     return true;
 }
 
-void RockersModel::shuffle()
+void RockersModel::shuffle(int seed)
 {
+    qsrand(seed);
     do
     {
         for (int i = 0; i < _size * _size / 2; i++)
