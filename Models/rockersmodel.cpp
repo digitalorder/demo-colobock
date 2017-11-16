@@ -39,7 +39,7 @@ void RockersModel::shuffle(int seed)
     qsrand(seed);
     do
     {
-        for (int i = 0; i < _size * _size / 2; i++)
+        for (int i = 0; i < _size * _size; i++)
         {
             int x = qrand() % _size;
             int y = qrand() % _size;

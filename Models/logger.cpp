@@ -5,9 +5,15 @@ Logger::Logger(): _move_counter(0), _is_blocked(false)
 {
 }
 
-void Logger::updateMoveCounter()
+void Logger::incMoveCounter()
 {
     _move_counter++;
+    emit moveCounterChanged(_move_counter);
+}
+
+void Logger::decMoveCounter()
+{
+    _move_counter--;
     emit moveCounterChanged(_move_counter);
 }
 
@@ -33,7 +39,7 @@ void Logger::newUserAction(int x, int y, ActionSource source)
 {
     if (source == ActionSource::CONTROLLER)
     {
-        updateMoveCounter();
+        incMoveCounter();
         _move_history.append(UserAction(x, y));
         _undo_history.clear();
         emitAvailabilityNotifications();
@@ -42,7 +48,6 @@ void Logger::newUserAction(int x, int y, ActionSource source)
 
 void Logger::moveAction(QVector<UserAction> &to, QVector<UserAction> &from)
 {
-    updateMoveCounter();
     UserAction a = from.takeLast();
     to.append(a);
     emitAvailabilityNotifications();
@@ -51,11 +56,13 @@ void Logger::moveAction(QVector<UserAction> &to, QVector<UserAction> &from)
 
 void Logger::redoLastUserAction()
 {
+    incMoveCounter();
     moveAction(_move_history, _undo_history);
 }
 
 void Logger::undoLastUserAction()
 {
+    decMoveCounter();
     moveAction(_undo_history, _move_history);
 }
 

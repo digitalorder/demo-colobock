@@ -27,7 +27,8 @@ class Logger : public QObject, public Blockable
     QVector<UserAction> _undo_history;
     int _move_counter;
     bool _is_blocked;
-    void updateMoveCounter();
+    void incMoveCounter();
+    void decMoveCounter();
     void resetMoveCounter();
     void emitAvailabilityNotifications();
     void emitNoAvailabilityNotifications();
