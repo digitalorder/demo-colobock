@@ -34,19 +34,31 @@ bool RockersModel::allRockersAreHorizontal()
     return true;
 }
 
-void RockersModel::shuffle(int seed)
+int RockersModel::shuffle(int seed)
 {
     qsrand(seed);
+    QSet<Coord> solution;
     do
     {
-        for (int i = 0; i < _size * _size; i++)
+        // prime numbers lead to more complex puzzles
+        for (int i = 0; i < 151; i++)
         {
             Coord coord(qrand() % _size, qrand() % _size);
             toggleRocker(coord);
             emit toggleRockerWithoutLogic(coord);
             emit toggleRockerWithLogic(coord, ActionSource::MODEL);
+            if (solution.contains(coord))
+            {
+                solution.remove(coord);
+            }
+            else
+            {
+                solution.insert(coord);
+            }
         }
     } while (allRockersAreHorizontal());
+
+    return solution.size();
 }
 
 QDebug operator<<(QDebug stream, const RockersModel &model)

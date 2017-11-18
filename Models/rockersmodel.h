@@ -23,7 +23,7 @@ public:
     virtual bool isBlocked() { return _is_blocked; }
     virtual void block() { _is_blocked = true; }
     virtual void unblock() { _is_blocked = false; emit modelStateUpdated(RockersModel(*this)); }
-    void shuffle(int seed);
+    int shuffle(int seed);
 
 signals:
     void modelStateUpdated(const RockersModel & m);

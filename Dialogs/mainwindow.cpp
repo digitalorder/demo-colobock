@@ -159,8 +159,9 @@ void MainWindow::showEvent(QShowEvent *)
         qsrand(static_cast<quint64>(QTime::currentTime().msecsSinceStartOfDay()));
         _seed = qrand();
     }
-    _rockers_model->shuffle(_seed);
+    _minimum_moves = _rockers_model->shuffle(_seed);
     _win_logic->unblock();
+    qDebug() << "This puzzle might be solved in" << _minimum_moves << "moves";
     setWindowTitle(QString("Colobock (seed#%1)").arg(_seed));
 }
 

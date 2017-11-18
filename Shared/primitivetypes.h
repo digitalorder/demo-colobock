@@ -42,6 +42,16 @@ public:
     int y() const { return _y; }
 };
 
+inline bool operator==(const Coord &lhs, const Coord &rhs)
+{
+    return (lhs.x() == rhs.x()) && (lhs.y() == rhs.y());
+}
+
+inline uint qHash(const Coord &key)
+{
+    return key.x() * 0x100 + key.y();
+}
+
 QDebug operator <<(QDebug os, const ActionSource& source);
 QDebug operator <<(QDebug os, const SwitchingTiming& timing);
 QDebug operator <<(QDebug os, const Coord& coord);
