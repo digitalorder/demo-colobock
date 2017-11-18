@@ -35,12 +35,12 @@ void Logger::emitNoAvailabilityNotifications()
     emit redoAvailablityChanged(false);
 }
 
-void Logger::newUserAction(int x, int y, ActionSource source)
+void Logger::newUserAction(const Coord &coord, ActionSource source)
 {
     if (source == ActionSource::CONTROLLER)
     {
         incMoveCounter();
-        _move_history.append(UserAction(x, y));
+        _move_history.append(UserAction(coord));
         _undo_history.clear();
         emitAvailabilityNotifications();
     }
@@ -51,7 +51,7 @@ void Logger::moveAction(QVector<UserAction> &to, QVector<UserAction> &from)
     UserAction a = from.takeLast();
     to.append(a);
     emitAvailabilityNotifications();
-    emit revertAction(a.x(), a.y(), ActionSource::UNDO_REDO);
+    emit revertAction(a.coord(), ActionSource::UNDO_REDO);
 }
 
 void Logger::redoLastUserAction()

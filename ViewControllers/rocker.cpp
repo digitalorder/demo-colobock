@@ -2,7 +2,7 @@
 
 void Rocker::clickedEventCatcher(bool)
 {
-    emit clickedOverride(_x, _y);
+    emit clickedOverride(_coord);
 }
 
 void Rocker::setState(State state)
@@ -35,7 +35,7 @@ void Rocker::toggleState()
     }
 }
 
-Rocker::Rocker(int x, int y, State state, QWidget *parent) : QPushButton(parent), _x(x), _y(y)
+Rocker::Rocker(const Coord &coord, State state, QWidget *parent) : QPushButton(parent), _coord(coord)
 {
     QIcon ico = QIcon();
     ico.addPixmap(QPixmap(":/images/resources/Vertical.jpg"), QIcon::Normal, QIcon::On);

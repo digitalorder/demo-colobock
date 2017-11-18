@@ -20,11 +20,11 @@ public:
 signals:
     void blockControllers();
     void unblockControllers();
-    void rockerSwitchedSignal(int x, int y, ActionSource source);
+    void rockerSwitchedSignal(const Coord &coord, ActionSource source);
 
 public slots:
-    void rockerSwitchedSlot(int x, int y, ActionSource source);
-    void toggleRocker(int x, int y, ActionSource source);
+    void rockerSwitchedSlot(const Coord &coord, ActionSource source);
+    void toggleRocker(const Coord &coord, ActionSource source);
 
 private slots:
     void rockerDelayTimeout();

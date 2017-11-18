@@ -8,16 +8,17 @@
 
 class UserAction
 {
-    int _x;
-    int _y;
+    Coord _coord;
 
 public:
-    UserAction(): _x(0), _y(0) {}
-    UserAction(int x, int y): _x(x), _y(y) {}
-    UserAction(const UserAction &a) { _x = a.x(); _y = a.y(); }
+    UserAction(): _coord(Coord()) {}
+    UserAction(const Coord &coord): _coord(coord) {}
+    UserAction(const UserAction& a) = default;
+    UserAction(UserAction&& a) = default;
+    UserAction& operator=(UserAction&& a) = default;
+    UserAction& operator=(const UserAction& a) = default;
 
-    int x() const { return _x; }
-    int y() const { return _y; }
+    Coord coord() const { return _coord; }
 };
 
 class Logger : public QObject, public Blockable
@@ -41,13 +42,13 @@ public:
     virtual void unblock() { _is_blocked = false; emitAvailabilityNotifications(); }
 
 signals:
-    void revertAction(int x, int y, ActionSource source);
+    void revertAction(const Coord &coord, ActionSource source);
     void undoAvailablityChanged(bool enabled);
     void redoAvailablityChanged(bool enabled);
     void moveCounterChanged(int value);
 
 public slots:
-    void newUserAction(int x, int y, ActionSource source);
+    void newUserAction(const Coord& coord, ActionSource source);
     void redoLastUserAction();
     void undoLastUserAction();
     void disable();

@@ -41,3 +41,8 @@ QDebug operator <<(QDebug os, const SwitchingTiming &timing)
 
     return os;
 }
+
+QDebug operator <<(QDebug os, const Coord &coord)
+{
+    return os << "(x =" << coord.x() << ", y =" << coord.y() << ")";
+}

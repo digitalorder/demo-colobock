@@ -14,7 +14,7 @@ void LocksLogic::newRockersStateSlot(const RockersModel &state)
         Lock::State lockState = Lock::UNLOCKED;
         for (int x = 0; x < _size; x++)
         {
-             if (state.read(x, y))
+             if (state.read(Coord(x, y)))
              {
                  lockState = Lock::LOCKED;
                  break;

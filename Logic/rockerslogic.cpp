@@ -4,13 +4,12 @@
 class ToggleContext
 {
 public:
-    ToggleContext(int x, int y, ActionSource source, SwitchingTiming timing):
-        x(x), y(y), distance(1), action_source(source), timing(timing)
+    ToggleContext(Coord coord, ActionSource source, SwitchingTiming timing):
+        coord(coord), distance(1), action_source(source), timing(timing)
     {
     }
 
-    int x;
-    int y;
+    Coord coord;
     int distance;
     ActionSource action_source;
     SwitchingTiming timing;
@@ -20,12 +19,11 @@ public:
 
 QDebug operator <<(QDebug os, const ToggleContext & obj)
 {
-    os << "ToggleContext(x =" << obj.x << ", y =" << obj.y << ", distance =" << obj.distance << ", source =" << obj.action_source << ", timing =" << obj.timing << ")";
-    return os;
+    return os << "ToggleContext(Coord =" << obj.coord << ", distance =" << obj.distance << ", source =" << obj.action_source << ", timing =" << obj.timing << ")";
 }
 
 
-ToggleContext _toggle_context(0, 0, ActionSource::MODEL, SwitchingTiming::INSTANT);
+ToggleContext _toggle_context(Coord(), ActionSource::MODEL, SwitchingTiming::INSTANT);
 
 RockersLogic::RockersLogic(int size) : _size(size)
 {
@@ -40,24 +38,24 @@ int RockersLogic::do_toggling()
 {
     qDebug() << "RockersLogic: doing toggling for context " << _toggle_context;
     int toggled_count = 0;
-    if (_toggle_context.x - _toggle_context.distance >= 0)
+    if (_toggle_context.coord.x() - _toggle_context.distance >= 0)
     {
-        emit rockerSwitchedSignal(_toggle_context.x - _toggle_context.distance, _toggle_context.y, ActionSource::LOGIC);
+        emit rockerSwitchedSignal(Coord(_toggle_context.coord.x() - _toggle_context.distance, _toggle_context.coord.y()), ActionSource::LOGIC);
         toggled_count++;
     }
-    if (_toggle_context.x + _toggle_context.distance < _size)
+    if (_toggle_context.coord.x() + _toggle_context.distance < _size)
     {
-        emit rockerSwitchedSignal(_toggle_context.x + _toggle_context.distance, _toggle_context.y, ActionSource::LOGIC);
+        emit rockerSwitchedSignal(Coord(_toggle_context.coord.x() + _toggle_context.distance, _toggle_context.coord.y()), ActionSource::LOGIC);
         toggled_count++;
     }
-    if (_toggle_context.y - _toggle_context.distance >= 0)
+    if (_toggle_context.coord.y() - _toggle_context.distance >= 0)
     {
-        emit rockerSwitchedSignal(_toggle_context.x, _toggle_context.y - _toggle_context.distance, ActionSource::LOGIC);
+        emit rockerSwitchedSignal(Coord(_toggle_context.coord.x(), _toggle_context.coord.y() - _toggle_context.distance), ActionSource::LOGIC);
         toggled_count++;
     }
-    if (_toggle_context.y + _toggle_context.distance < _size)
+    if (_toggle_context.coord.y() + _toggle_context.distance < _size)
     {
-        emit rockerSwitchedSignal(_toggle_context.x, _toggle_context.y + _toggle_context.distance, ActionSource::LOGIC);
+        emit rockerSwitchedSignal(Coord(_toggle_context.coord.x(), _toggle_context.coord.y() + _toggle_context.distance), ActionSource::LOGIC);
         toggled_count++;
     }
     _toggle_context.distance++;
@@ -82,15 +80,15 @@ void RockersLogic::toggleRelatedRockers()
     }
 }
 
-void RockersLogic::rockerSwitchedSlot(int x, int y, ActionSource source)
+void RockersLogic::rockerSwitchedSlot(const Coord &coord, ActionSource source)
 {
-    qDebug() << "RockersLogic: catched a toggle at (" << x << "," << y << ") from" << source;
+    qDebug() << "RockersLogic: catched a toggle at " << coord << " from" << source;
     SwitchingTiming timing = source == ActionSource::MODEL ? SwitchingTiming::INSTANT : SwitchingTiming::DELAYED;
-    _toggle_context = ToggleContext(x, y, source, timing);
+    _toggle_context = ToggleContext(coord, source, timing);
     emit blockControllers();
     if (source == ActionSource::CONTROLLER)
     {
-        emit rockerSwitchedSignal(_toggle_context.x, _toggle_context.y, source);
+        emit rockerSwitchedSignal(_toggle_context.coord, source);
     }
     if (timing == SwitchingTiming::INSTANT)
     {
@@ -107,7 +105,7 @@ void RockersLogic::rockerDelayTimeout()
     toggleRelatedRockers();
 }
 
-void RockersLogic::toggleRocker(int x, int y, ActionSource source)
+void RockersLogic::toggleRocker(const Coord &coord, ActionSource source)
 {
-    rockerSwitchedSlot(x, y, source);
+    rockerSwitchedSlot(coord, source);
 }

@@ -38,21 +38,21 @@ bool RockersMatrix::isBlocked()
     return false;
 }
 
-Rocker * RockersMatrix::getRocker(int x, int y)
+Rocker * RockersMatrix::getRocker(const Coord &coord)
 {
-    int index = x * _size + y;
+    int index = coord.x() * _size + coord.y();
     return _rockerMap[index];
 }
 
-void RockersMatrix::toggleRocker(int x, int y)
+void RockersMatrix::toggleRocker(const Coord &coord)
 {
-    qDebug() << "RockersMatrix: received a request to toggle (" << x << "," << y << ")";
-    getRocker(x, y)->toggleState();
+    qDebug() << "RockersMatrix: received a request to toggle " << coord;
+    getRocker(coord)->toggleState();
 }
 
-Rocker::State RockersMatrix::rockerState(int x, int y)
+Rocker::State RockersMatrix::rockerState(const Coord &coord)
 {
-    return getRocker(x, y)->getState();
+    return getRocker(coord)->getState();
 }
 
 QSize RockersMatrix::sizeHint() const
@@ -66,8 +66,9 @@ void RockersMatrix::generateRockers(const RockersModel & m)
     {
         for (int y = 0; y < _size; y++)
         {
-            Rocker * rocker = new Rocker(x, y, m.read(x, y));
-            addWidget(rocker, x, y);
+            Coord coord(x, y);
+            Rocker * rocker = new Rocker(coord, m.read(coord));
+            addWidget(rocker, coord.x(), coord.y());
             _rockerMap.append(rocker);
             connect(rocker, &Rocker::clickedOverride, this, &RockersMatrix::rockerSwitchedInterimSlot);
         }
@@ -76,8 +77,8 @@ void RockersMatrix::generateRockers(const RockersModel & m)
     }
 }
 
-void RockersMatrix::rockerSwitchedInterimSlot(int x, int y)
+void RockersMatrix::rockerSwitchedInterimSlot(const Coord &coord)
 {
-    emit rockerToggled(x, y, ActionSource::CONTROLLER);
+    emit rockerToggled(coord, ActionSource::CONTROLLER);
 }
 

@@ -12,13 +12,13 @@ class RockersModel: public QObject, public Blockable
     int _size;
     bool _is_blocked;
     QVector<QVector<Rocker::State>> _storage;
-    void toggleRocker(int x, int y);
+    void toggleRocker(const Coord &coord);
     bool allRockersAreHorizontal();
 
 public:
     RockersModel(int size);
     RockersModel(const RockersModel &obj);
-    Rocker::State read(int x, int y) const;
+    Rocker::State read(const Coord &coord) const;
     int size() const { return _size; }
     virtual bool isBlocked() { return _is_blocked; }
     virtual void block() { _is_blocked = true; }
@@ -27,11 +27,11 @@ public:
 
 signals:
     void modelStateUpdated(const RockersModel & m);
-    void toggleRockerWithoutLogic(int x, int y);
-    void toggleRockerWithLogic(int x, int y, ActionSource source);
+    void toggleRockerWithoutLogic(const Coord &coord);
+    void toggleRockerWithLogic(const Coord &coord, ActionSource source);
 
 public slots:
-    void rockerToggled(int x, int y, ActionSource source);
+    void rockerToggled(const Coord &coord, ActionSource source);
 };
 
 QDebug operator <<(QDebug stream, const RockersModel &model);

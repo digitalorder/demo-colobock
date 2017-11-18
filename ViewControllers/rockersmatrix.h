@@ -13,7 +13,7 @@ class RockersMatrix : public QGridLayout, public Blockable
 
     int _size;
     QVector<Rocker *> _rockerMap;
-    Rocker * getRocker(int x, int y);
+    Rocker * getRocker(const Coord& coord);
     Rocker::State generateRockerState();
     void generateRockers(const RockersModel &m);
 
@@ -22,18 +22,18 @@ public:
     explicit RockersMatrix(const RockersModel &model, QWidget *parent = 0);
 
     int size() { return _size; }
-    void toggleRocker(int x, int y);
-    Rocker::State rockerState(int x, int y);
+    void toggleRocker(const Coord& coord);
+    Rocker::State rockerState(const Coord& coord);
     virtual bool isBlocked();
     virtual void block();
     virtual void unblock();
 
 signals:
-    void rockerToggled(int x, int y, ActionSource source);
+    void rockerToggled(const Coord& coord, ActionSource source);
 
 
 private slots:
-    void rockerSwitchedInterimSlot(int x, int y);
+    void rockerSwitchedInterimSlot(const Coord& coord);
 };
 
 #endif // ROCKERMATRIX_H
