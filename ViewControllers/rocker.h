@@ -20,7 +20,7 @@ public:
         VERTICAL
     };
 
-    explicit Rocker(const Coord &coord, State state, QWidget *parent = 0);
+    explicit Rocker(const Coord &coord, State state, bool darkTheme, QWidget *parent = 0);
     Rocker::State getState();
     void toggleState();
     void setState(State state);

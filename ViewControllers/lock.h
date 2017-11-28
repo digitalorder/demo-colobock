@@ -15,7 +15,7 @@ public:
         UNLOCKED
     };
 
-    explicit Lock(int x, QWidget *parent = 0);
+    explicit Lock(int x, bool darkTheme, QWidget *parent = 0);
     State state() { return _state; }
 
 private:

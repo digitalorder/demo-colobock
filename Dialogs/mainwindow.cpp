@@ -23,12 +23,19 @@ void MainWindow::restartLayout()
 void MainWindow::drawWidgets()
 {
     QHBoxLayout * loButtons = new QHBoxLayout();
+//    loButtons->addWidget(_btn_full_undo);
     loButtons->addWidget(_btn_undo);
     loButtons->addWidget(_btn_redo);
     loButtons->addSpacerItem(new QSpacerItem(2, 0, QSizePolicy::Expanding));
     loButtons->addWidget(_lbl_move_counter);
+
+    QFont font = _lbl_move_counter->font();
+    font.setBold(true);
+    _lbl_move_counter->setFont(font);
+
     loButtons->addSpacerItem(new QSpacerItem(2, 0, QSizePolicy::Expanding));
     loButtons->addWidget(_btn_config);
+//    loButtons->addWidget(_btn_highest_score);
     loButtons->addWidget(_btn_info);
     loButtons->setMargin(0);
 
@@ -39,10 +46,10 @@ void MainWindow::drawWidgets()
     loLocks->addSpacerItem(new QSpacerItem(2, 0, QSizePolicy::Expanding));
 
     QHBoxLayout * loRockers = new QHBoxLayout();
-    loRockers->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
+    loRockers->addSpacerItem(new QSpacerItem(2, 0, QSizePolicy::Expanding));
     loRockers->addLayout(_rockers);
-    loRockers->setMargin(0);
-    loRockers->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
+    loRockers->addSpacerItem(new QSpacerItem(2, 0, QSizePolicy::Expanding));
+    _rockers->setSizeConstraint(QLayout::SetFixedSize);
 
     QVBoxLayout * loMain = new QVBoxLayout();
     loMain->addLayout(loButtons);
@@ -50,14 +57,30 @@ void MainWindow::drawWidgets()
     loMain->addLayout(loRockers);
 
     QPalette pal = palette();
-    pal.setColor(QPalette::Background, QColor(185, 180, 186));
+    if (_dark_theme)
+    {
+        pal.setColor(QPalette::Background, QColor(79, 76, 75));
+        QPalette pal1 = _lbl_move_counter->palette();
+        pal1.setColor(_lbl_move_counter->foregroundRole(), QColor(169, 161, 158));
+        _lbl_move_counter->setPalette(pal1);
+    }
+    else
+    {
+        pal.setColor(QPalette::Background, QColor(169, 161, 158));
+        QPalette pal1 = _lbl_move_counter->palette();
+        pal1.setColor(_lbl_move_counter->foregroundRole(), QColor(79, 76, 75));
+        _lbl_move_counter->setPalette(pal1);
+    }
     _central_widget->setAutoFillBackground(true);
     _central_widget->setPalette(pal);
 
-    setButtonIcon(_btn_undo, QString(":/images/resources/Undo.jpg"));
-    setButtonIcon(_btn_redo, QString(":/images/resources/Redo.jpg"));
-    setButtonIcon(_btn_config, QString(":/images/resources/Config.jpg"));
-    setButtonIcon(_btn_info, QString(":/images/resources/Info.jpg"));
+    QString resourceFolder = _dark_theme ? QString(":/images/resources/Dark/") : QString(":/images/resources/Light/");
+//    setButtonIcon(_btn_full_undo, QString(resourceFolder + "Full_Undo_Active.png"), QString(resourceFolder + "Full_Undo_Inactive.png"));
+    setButtonIcon(_btn_undo, QString(resourceFolder + "Undo_Active.png"), QString(resourceFolder + "Undo_Inactive.png"));
+    setButtonIcon(_btn_redo, QString(resourceFolder + "Redo_Active.png"), QString(resourceFolder + "Redo_Inactive.png"));
+//    setButtonIcon(_btn_highest_score, QString(resourceFolder + "Top.png"));
+    setButtonIcon(_btn_config, QString(resourceFolder + "Config.png"));
+    setButtonIcon(_btn_info, QString(resourceFolder + "Info.png"));
 
     _central_widget->setLayout(loMain);
     _central_widget->adjustSize();
@@ -87,10 +110,14 @@ void MainWindow::deleteLayout()
     deleteParentless();
 }
 
-void MainWindow::setButtonIcon(QPushButton * button, const QString & resourcePath)
+void MainWindow::setButtonIcon(QPushButton * button, const QString & resourcePath, const QString & inactiveResourcePath)
 {
     QIcon ico;
     ico.addPixmap(QPixmap(resourcePath), QIcon::Normal, QIcon::On);
+    if (inactiveResourcePath != nullptr)
+    {
+        ico.addPixmap(QPixmap(inactiveResourcePath), QIcon::Disabled, QIcon::On);
+    }
     button->setIcon(ico);
     button->setIconSize(QSize(32, 32));
     button->setFixedSize(QSize(32, 32));
@@ -98,18 +125,18 @@ void MainWindow::setButtonIcon(QPushButton * button, const QString & resourcePat
 
 void MainWindow::constructLayout()
 {
-    _locks = new LocksArray(_matrix_size);
+    _locks = new LocksArray(_matrix_size, _dark_theme);
     _locks_logic = new LocksLogic(_matrix_size);
     _locks_model = new LocksModel(_matrix_size);
-    _rockers = new RockersMatrix(_matrix_size);
+    _rockers = new RockersMatrix(_matrix_size, _dark_theme);
     _rockers_model = new RockersModel(_matrix_size);
     _rockers_logic = new RockersLogic(_matrix_size);
 
+    _btn_full_undo = new QPushButton("", this);
     _btn_undo = new QPushButton("", this);
-    _btn_undo->setEnabled(false);
     _btn_redo = new QPushButton("", this);
-    _btn_redo->setEnabled(false);
     _btn_config = new QPushButton("", this);
+    _btn_highest_score = new QPushButton("", this);
     _btn_info = new QPushButton("", this);
     _lbl_move_counter = new QLabel(QString("Moves: 0   "), this);
     _central_widget = new QWidget(this);
@@ -141,6 +168,7 @@ void MainWindow::constructLayout()
     connect(_btn_redo, &QPushButton::clicked, _logger, &Logger::redoLastUserAction);
     connect(_logger, &Logger::revertAction, _rockers_model, &RockersModel::rockerToggled);
     connect(_logger, &Logger::undoAvailablityChanged, _btn_undo, &QPushButton::setEnabled);
+    connect(_logger, &Logger::undoAvailablityChanged, _btn_full_undo, &QPushButton::setEnabled);
     connect(_logger, &Logger::redoAvailablityChanged, _btn_redo, &QPushButton::setEnabled);
     connect(_logger, &Logger::moveCounterChanged, this, &MainWindow::moveCounterChanged);
     connect(_btn_config, &QPushButton::clicked, this, &MainWindow::configBtnClicked);
@@ -190,13 +218,14 @@ void MainWindow::moveCounterChanged(int value)
 
 void MainWindow::configBtnClicked()
 {
-    ConfigDialog dialog(_matrix_size, _seed);
+    ConfigDialog dialog(_matrix_size, _seed, _dark_theme);
     dialog.setModal(true);
     int dialogResult = dialog.exec();
     if (dialogResult == QDialog::Accepted)
     {
         _matrix_size = dialog.matrixSize();
         _seed = dialog.seed();
+        _dark_theme = dialog.darkTheme();
         restartLayout();
     }
 }

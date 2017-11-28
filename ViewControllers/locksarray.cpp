@@ -1,10 +1,10 @@
 #include "locksarray.h"
 #include <QSpacerItem>
 
-LocksArray::LocksArray(int size, QWidget *parent): QGridLayout(parent)
+LocksArray::LocksArray(int size, bool darkTheme, QWidget *parent): QGridLayout(parent)
 {
-    setSpacing(3);
-    reinit(size);
+    setSpacing(4);
+    reinit(size, darkTheme);
 }
 
 void LocksArray::updateLocksStates(const LocksModel &state)
@@ -20,13 +20,13 @@ void LocksArray::setState(int x, Lock::State state)
     _lockMap.at(x)->setState(state);
 }
 
-void LocksArray::reinit(int matrixSize)
+void LocksArray::reinit(int matrixSize, bool darkTheme)
 {
     for (int x = 0; x < matrixSize; x++)
     {
         setRowMinimumHeight(0, 16);
         setColumnMinimumWidth(x, 16);
-        Lock * lock = new Lock(x);
+        Lock * lock = new Lock(x, darkTheme);
         addWidget(lock, 0, x);
         _lockMap.append(lock);
     }

@@ -15,11 +15,12 @@ Rocker::State RockersMatrix::generateRockerState()
     }
 }
 
-RockersMatrix::RockersMatrix(const RockersModel &model, QWidget *parent) : QGridLayout(parent)
+RockersMatrix::RockersMatrix(const RockersModel &model, bool darkTheme, QWidget *parent) : QGridLayout(parent)
 {
     _size = model.size();
     setSpacing(0);
-    generateRockers(model);
+    setContentsMargins(0, 0, 0, 0);
+    generateRockers(model, darkTheme);
 }
 
 void RockersMatrix::block()
@@ -57,17 +58,17 @@ Rocker::State RockersMatrix::rockerState(const Coord &coord)
 
 QSize RockersMatrix::sizeHint() const
 {
-    return QSize(_rockerMap.at(0)->width() * _size * 1.4, _rockerMap.at(0)->height() * _size * 1.5);
+    return QSize(_rockerMap.at(0)->width() * _size * 1.25, _rockerMap.at(0)->height() * _size);
 }
 
-void RockersMatrix::generateRockers(const RockersModel & m)
+void RockersMatrix::generateRockers(const RockersModel & m, bool darkTheme)
 {
     for (int x = 0; x < _size; x++)
     {
         for (int y = 0; y < _size; y++)
         {
             Coord coord(x, y);
-            Rocker * rocker = new Rocker(coord, m.read(coord));
+            Rocker * rocker = new Rocker(coord, m.read(coord), darkTheme);
             addWidget(rocker, coord.x(), coord.y());
             _rockerMap.append(rocker);
             connect(rocker, &Rocker::clickedOverride, this, &RockersMatrix::rockerSwitchedInterimSlot);

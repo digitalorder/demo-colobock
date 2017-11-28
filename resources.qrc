@@ -1,13 +1,31 @@
 <RCC>
     <qresource prefix="/images">
-        <file>resources/Vertical.jpg</file>
-        <file>resources/Horizontal.jpg</file>
-        <file>resources/Unlocked.jpg</file>
-        <file>resources/Locked.jpg</file>
-        <file>resources/Redo.jpg</file>
-        <file>resources/Undo.jpg</file>
-        <file>resources/Config.jpg</file>
-        <file>resources/Info.jpg</file>
         <file>resources/info.txt</file>
+        <file>resources/Light/Config.png</file>
+        <file>resources/Light/Full_Undo_Active.png</file>
+        <file>resources/Light/Full_Undo_Inactive.png</file>
+        <file>resources/Light/Horizontal.png</file>
+        <file>resources/Light/Info.png</file>
+        <file>resources/Light/Locked.png</file>
+        <file>resources/Light/Redo_Active.png</file>
+        <file>resources/Light/Redo_Inactive.png</file>
+        <file>resources/Light/Top.png</file>
+        <file>resources/Light/Undo_Active.png</file>
+        <file>resources/Light/Undo_Inactive.png</file>
+        <file>resources/Light/Unlocked.png</file>
+        <file>resources/Light/Vertical.png</file>
+        <file>resources/Dark/Config.png</file>
+        <file>resources/Dark/Full_Undo_Active.png</file>
+        <file>resources/Dark/Full_Undo_Inactive.png</file>
+        <file>resources/Dark/Horizontal.png</file>
+        <file>resources/Dark/Info.png</file>
+        <file>resources/Dark/Locked.png</file>
+        <file>resources/Dark/Redo_Active.png</file>
+        <file>resources/Dark/Redo_Inactive.png</file>
+        <file>resources/Dark/Top.png</file>
+        <file>resources/Dark/Undo_Active.png</file>
+        <file>resources/Dark/Undo_Inactive.png</file>
+        <file>resources/Dark/Unlocked.png</file>
+        <file>resources/Dark/Vertical.png</file>
     </qresource>
 </RCC>

@@ -1,16 +1,17 @@
 #include "lock.h"
 
-Lock::Lock(int x, QWidget *parent) : QPushButton(parent), _x(x)
+Lock::Lock(int x, bool darkTheme, QWidget *parent) : QPushButton(parent), _x(x)
 {
     QIcon ico = QIcon();
-    ico.addPixmap(QPixmap(":/images/resources/Locked.jpg"), QIcon::Normal, QIcon::On);
-    ico.addPixmap(QPixmap(":/images/resources/Unlocked.jpg"), QIcon::Normal, QIcon::Off);
+    QString resourceFolder = darkTheme ? QString(":/images/resources/Dark/") : QString(":/images/resources/Light/");
+    ico.addPixmap(QPixmap(resourceFolder + "Locked.png"), QIcon::Disabled, QIcon::On);
+    ico.addPixmap(QPixmap(resourceFolder + "Unlocked.png"), QIcon::Disabled, QIcon::Off);
     setIcon(ico);
-    setIconSize(QSize(20, 32));
+    setIconSize(QSize(19, 32));
     setEnabled(false);
     setCheckable(true);
     setMaximumHeight(32);
-    setMaximumWidth(20);
+    setMaximumWidth(19);
 }
 
 void Lock::setState(Lock::State state)

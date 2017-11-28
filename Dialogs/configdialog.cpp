@@ -11,12 +11,14 @@ const int MAXIMUM_MATRIX_SIZE = 12;
 const int MINIMUM_SEED = 0;
 const int MAXIMUM_SEED = INT32_MAX - 1;
 
-ConfigDialog::ConfigDialog(int matrixSize, int seed): _matrix_size(matrixSize), _seed(seed)
+ConfigDialog::ConfigDialog(int matrixSize, int seed, bool darkTheme): _matrix_size(matrixSize), _seed(seed), _dark_theme(darkTheme)
 {
     QPushButton * btnOk = new QPushButton("OK");
     QPushButton * btnCancel = new QPushButton("Cancel");
     _ledit_matrix_size = new QLineEdit(QString("%1").arg(matrixSize));
     _ledit_seed = new QLineEdit(QString("%1").arg(seed));
+    _chbox_dark_theme = new QCheckBox();
+    _chbox_dark_theme->setChecked(darkTheme);
 
     QGroupBox * gboxSettings = new QGroupBox("Game settings", this);
 
@@ -32,6 +34,12 @@ ConfigDialog::ConfigDialog(int matrixSize, int seed): _matrix_size(matrixSize), 
     loSeed->addSpacerItem(new QSpacerItem(1, 0, QSizePolicy::Expanding));
     loSeed->addWidget(_ledit_seed, 0, Qt::AlignRight);
     loSettings->addLayout(loSeed);
+
+    QHBoxLayout * loDarkTheme = new QHBoxLayout();
+    loDarkTheme->addWidget(new QLabel("Dark theme mode"));
+    loDarkTheme->addSpacerItem(new QSpacerItem(1, 0, QSizePolicy::Expanding));
+    loDarkTheme->addWidget(_chbox_dark_theme, 0, Qt::AlignRight);
+    loSettings->addLayout(loDarkTheme);
     gboxSettings->setLayout(loSettings);
 
     QHBoxLayout * loButtons = new QHBoxLayout();
@@ -83,6 +91,7 @@ void ConfigDialog::accepted()
 
     _matrix_size = newMatrixSize;
     _seed = newSeed;
+    _dark_theme = _chbox_dark_theme->isChecked();
 
     emit accept();
 }

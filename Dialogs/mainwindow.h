@@ -23,6 +23,8 @@ class MainWindow : public QMainWindow
     LocksLogic * _locks_logic;
     WinLogic * _win_logic;
     Logger * _logger;
+    QPushButton * _btn_full_undo;
+    QPushButton * _btn_highest_score;
     QPushButton * _btn_undo;
     QPushButton * _btn_redo;
     QPushButton * _btn_config;
@@ -33,12 +35,13 @@ class MainWindow : public QMainWindow
     int _minimum_moves;
     const int SEED_IS_NOT_SET = INT32_MAX;
     int _seed;
+    bool _dark_theme;
     void restartLayout();
     void drawWidgets();
     void deleteLayout();
     void constructLayout();
     void showEvent(QShowEvent *);
-    void setButtonIcon(QPushButton *button, const QString &resourcePath);
+    void setButtonIcon(QPushButton *button, const QString &resourcePath, const QString &inactiveResourcePath = nullptr);
     void deleteParentless();
 
 public:

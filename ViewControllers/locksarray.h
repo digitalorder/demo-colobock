@@ -13,10 +13,10 @@ class LocksArray : public QGridLayout
     QVector<Lock *> _lockMap;
     Lock * getLock(int x);
 public:
-    explicit LocksArray(int size = 2, QWidget *parent = 0);
+    explicit LocksArray(int size = 2, bool darkTheme = false, QWidget *parent = 0);
     int size() { return _lockMap.size(); }
     void setState(int x, Lock::State state);
-    void reinit(int matrixSize);
+    void reinit(int matrixSize, bool darkTheme);
 
 public slots:
     void updateLocksStates(const LocksModel &state);
