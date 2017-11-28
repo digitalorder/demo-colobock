@@ -35,6 +35,7 @@ SOURCES += main.cpp\
     Models/rockersmodel.cpp \
     Models/locksmodel.cpp \
     Models/logger.cpp \
+    Models/settings.cpp \
     ViewControllers/rocker.cpp \
     ViewControllers/rockersmatrix.cpp \
     ViewControllers/lock.cpp \
@@ -51,6 +52,7 @@ HEADERS  += \
     Models/rockersmodel.h \
     Models/locksmodel.h \
     Models/logger.h \
+    Models/settings.h \
     ViewControllers/rocker.h \
     ViewControllers/rockersmatrix.h \
     ViewControllers/lock.h \

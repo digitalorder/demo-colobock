@@ -5,6 +5,7 @@
 #include <QDebug>
 #include "lock.h"
 #include "primitivetypes.h"
+#include "settings.h"
 
 class LocksModel: public QObject, public Blockable
 {
@@ -13,7 +14,7 @@ class LocksModel: public QObject, public Blockable
     bool _is_blocked;
 
 public:
-    LocksModel(int size);
+    LocksModel(const Settings & settings);
     LocksModel(const LocksModel &obj);
     int size() const { return _storage.size(); }
     Lock::State read(int x) const;

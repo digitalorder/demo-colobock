@@ -4,6 +4,7 @@
 #include <QObject>
 #include "locksarray.h"
 #include "rockersmodel.h"
+#include "settings.h"
 
 class LocksLogic : public QObject
 {
@@ -12,7 +13,7 @@ class LocksLogic : public QObject
     bool _is_blocked;
 
 public:
-    explicit LocksLogic(int size);
+    explicit LocksLogic(const Settings & settings);
 
 signals:
     void blockControllers();

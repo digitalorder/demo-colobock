@@ -2,6 +2,7 @@
 #define ROCKER_H
 
 #include "primitivetypes.h"
+#include "settings.h"
 #include <QPushButton>
 
 class Rocker : public QPushButton
@@ -20,7 +21,7 @@ public:
         VERTICAL
     };
 
-    explicit Rocker(const Coord &coord, State state, bool darkTheme, QWidget *parent = 0);
+    explicit Rocker(const Coord &coord, State state, const Settings &settings, QWidget *parent = 0);
     Rocker::State getState();
     void toggleState();
     void setState(State state);

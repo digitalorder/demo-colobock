@@ -1,6 +1,6 @@
 #include "lockslogic.h"
 
-LocksLogic::LocksLogic(int size) : _size(size)
+LocksLogic::LocksLogic(const Settings &settings) : _size(settings.matrixSize())
 {
 
 }

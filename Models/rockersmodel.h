@@ -5,6 +5,7 @@
 #include <QDebug>
 #include "rocker.h"
 #include "primitivetypes.h"
+#include "settings.h"
 
 class RockersModel: public QObject, public Blockable
 {
@@ -16,7 +17,7 @@ class RockersModel: public QObject, public Blockable
     bool allRockersAreHorizontal();
 
 public:
-    RockersModel(int size);
+    RockersModel(const Settings &settings);
     RockersModel(const RockersModel &obj);
     Rocker::State read(const Coord &coord) const;
     int size() const { return _size; }

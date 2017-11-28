@@ -1,10 +1,10 @@
 #include "rockersmodel.h"
 #include <QTime>
 
-RockersModel::RockersModel(int size): _size(size), _is_blocked(false)
+RockersModel::RockersModel(const Settings &settings): _size(settings.matrixSize()), _is_blocked(false)
 {
-    _storage.resize(size);
-    std::for_each(_storage.begin(), _storage.end(), [size](QVector<Rocker::State> &s) { s.resize(size); } );
+    _storage.resize(_size);
+    std::for_each(_storage.begin(), _storage.end(), [settings](QVector<Rocker::State> &s) { s.resize(settings.matrixSize()); } );
 }
 
 RockersModel::RockersModel(const RockersModel &obj)

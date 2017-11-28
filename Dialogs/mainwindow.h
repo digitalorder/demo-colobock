@@ -11,6 +11,7 @@
 #include "locksmodel.h"
 #include "winlogic.h"
 #include "logger.h"
+#include "settings.h"
 
 class MainWindow : public QMainWindow
 {
@@ -31,11 +32,9 @@ class MainWindow : public QMainWindow
     QPushButton * _btn_info;
     QLabel * _lbl_move_counter;
     QWidget * _central_widget;
-    int _matrix_size;
     int _minimum_moves;
-    const int SEED_IS_NOT_SET = INT32_MAX;
-    int _seed;
-    bool _dark_theme;
+    Settings _settings;
+
     void restartLayout();
     void drawWidgets();
     void deleteLayout();
@@ -47,7 +46,6 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
-
 
 public slots:
     void winCatcher();

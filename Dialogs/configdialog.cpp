@@ -6,19 +6,14 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
-const int MINIMUM_MATRIX_SIZE = 2;
-const int MAXIMUM_MATRIX_SIZE = 12;
-const int MINIMUM_SEED = 0;
-const int MAXIMUM_SEED = INT32_MAX - 1;
-
-ConfigDialog::ConfigDialog(int matrixSize, int seed, bool darkTheme): _matrix_size(matrixSize), _seed(seed), _dark_theme(darkTheme)
+ConfigDialog::ConfigDialog(Settings &settings): _settings(settings)
 {
     QPushButton * btnOk = new QPushButton("OK");
     QPushButton * btnCancel = new QPushButton("Cancel");
-    _ledit_matrix_size = new QLineEdit(QString("%1").arg(matrixSize));
-    _ledit_seed = new QLineEdit(QString("%1").arg(seed));
+    _ledit_matrix_size = new QLineEdit(QString("%1").arg(settings.matrixSize()));
+    _ledit_seed = new QLineEdit(QString("%1").arg(settings.seed()));
     _chbox_dark_theme = new QCheckBox();
-    _chbox_dark_theme->setChecked(darkTheme);
+    _chbox_dark_theme->setChecked(settings.darkTheme());
 
     QGroupBox * gboxSettings = new QGroupBox("Game settings", this);
 
@@ -70,28 +65,9 @@ ConfigDialog::~ConfigDialog()
 
 void ConfigDialog::accepted()
 {
-    bool success = false;
-    int newMatrixSize = _ledit_matrix_size->text().toInt(&success);
-    if (!success)
-    {
-        return;
-    }
-
-    newMatrixSize = std::max(newMatrixSize, MINIMUM_MATRIX_SIZE);
-    newMatrixSize = std::min(newMatrixSize, MAXIMUM_MATRIX_SIZE);
-
-    int newSeed = _ledit_seed->text().toInt(&success);
-    if (!success)
-    {
-        return;
-    }
-
-    newSeed = std::max(newSeed, MINIMUM_SEED);
-    newSeed = std::min(newSeed, MAXIMUM_SEED);
-
-    _matrix_size = newMatrixSize;
-    _seed = newSeed;
-    _dark_theme = _chbox_dark_theme->isChecked();
+    _settings.setMatrixSize(_ledit_matrix_size->text().toInt());
+    _settings.setSeed(_ledit_seed->text().toInt());
+    _settings.setDarkTheme(_chbox_dark_theme->isChecked());
 
     emit accept();
 }

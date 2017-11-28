@@ -1,6 +1,7 @@
 #ifndef LOCK_H
 #define LOCK_H
 
+#include "settings.h"
 #include <QPushButton>
 #include <QDebug>
 
@@ -15,7 +16,7 @@ public:
         UNLOCKED
     };
 
-    explicit Lock(int x, bool darkTheme, QWidget *parent = 0);
+    explicit Lock(int x, const Settings &settings, QWidget *parent = 0);
     State state() { return _state; }
 
 private:

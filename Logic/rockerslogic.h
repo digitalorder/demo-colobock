@@ -4,6 +4,7 @@
 #include <QObject>
 #include "logger.h"
 #include "primitivetypes.h"
+#include "settings.h"
 #include <QTimer>
 
 class RockersLogic : public QObject
@@ -15,7 +16,7 @@ class RockersLogic : public QObject
     int do_toggling();
 
 public:
-    explicit RockersLogic(int size);
+    explicit RockersLogic(const Settings & settings);
 
 signals:
     void blockControllers();

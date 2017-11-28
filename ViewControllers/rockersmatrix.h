@@ -6,6 +6,7 @@
 #include "rocker.h"
 #include "rockersmodel.h"
 #include "primitivetypes.h"
+#include "settings.h"
 
 class RockersMatrix : public QGridLayout, public Blockable
 {
@@ -15,11 +16,11 @@ class RockersMatrix : public QGridLayout, public Blockable
     QVector<Rocker *> _rockerMap;
     Rocker * getRocker(const Coord& coord);
     Rocker::State generateRockerState();
-    void generateRockers(const RockersModel &m, bool darkTheme);
+    void generateRockers(const RockersModel &model, const Settings &settings);
 
 public:
     virtual QSize sizeHint() const;
-    explicit RockersMatrix(const RockersModel &model, bool darkTheme, QWidget *parent = 0);
+    explicit RockersMatrix(const RockersModel& model, const Settings &settings, QWidget *parent = 0);
 
     int size() { return _size; }
     void toggleRocker(const Coord& coord);

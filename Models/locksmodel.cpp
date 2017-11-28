@@ -1,8 +1,8 @@
 #include "locksmodel.h"
 
-LocksModel::LocksModel(int size)
+LocksModel::LocksModel(const Settings &settings)
 {
-    _storage.resize(size);
+    _storage.resize(settings.matrixSize());
 }
 
 LocksModel::LocksModel(const LocksModel &obj)

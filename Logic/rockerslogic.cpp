@@ -25,10 +25,10 @@ QDebug operator <<(QDebug os, const ToggleContext & obj)
 
 ToggleContext _toggle_context(Coord(), ActionSource::MODEL, SwitchingTiming::INSTANT);
 
-RockersLogic::RockersLogic(int size) : _size(size)
+RockersLogic::RockersLogic(const Settings &settings) : _size(settings.matrixSize())
 {
     _delay_timer = new QTimer(this);
-    _delay_timer->setInterval(500 / size);
+    _delay_timer->setInterval(500 / _size);
     _delay_timer->setSingleShot(true);
 
     connect(_delay_timer, &QTimer::timeout, this, &RockersLogic::rockerDelayTimeout);

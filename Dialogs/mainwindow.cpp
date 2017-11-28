@@ -57,7 +57,7 @@ void MainWindow::drawWidgets()
     loMain->addLayout(loRockers);
 
     QPalette pal = palette();
-    if (_dark_theme)
+    if (_settings.darkTheme())
     {
         pal.setColor(QPalette::Background, QColor(79, 76, 75));
         QPalette pal1 = _lbl_move_counter->palette();
@@ -74,13 +74,12 @@ void MainWindow::drawWidgets()
     _central_widget->setAutoFillBackground(true);
     _central_widget->setPalette(pal);
 
-    QString resourceFolder = _dark_theme ? QString(":/images/resources/Dark/") : QString(":/images/resources/Light/");
 //    setButtonIcon(_btn_full_undo, QString(resourceFolder + "Full_Undo_Active.png"), QString(resourceFolder + "Full_Undo_Inactive.png"));
-    setButtonIcon(_btn_undo, QString(resourceFolder + "Undo_Active.png"), QString(resourceFolder + "Undo_Inactive.png"));
-    setButtonIcon(_btn_redo, QString(resourceFolder + "Redo_Active.png"), QString(resourceFolder + "Redo_Inactive.png"));
+    setButtonIcon(_btn_undo, _settings.resourceFolder() + "Undo_Active.png", _settings.resourceFolder() + "Undo_Inactive.png");
+    setButtonIcon(_btn_redo, _settings.resourceFolder() + "Redo_Active.png", _settings.resourceFolder() + "Redo_Inactive.png");
 //    setButtonIcon(_btn_highest_score, QString(resourceFolder + "Top.png"));
-    setButtonIcon(_btn_config, QString(resourceFolder + "Config.png"));
-    setButtonIcon(_btn_info, QString(resourceFolder + "Info.png"));
+    setButtonIcon(_btn_config, _settings.resourceFolder() + "Config.png");
+    setButtonIcon(_btn_info, _settings.resourceFolder() + "Info.png");
 
     _central_widget->setLayout(loMain);
     _central_widget->adjustSize();
@@ -90,7 +89,7 @@ void MainWindow::drawWidgets()
 }
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), _matrix_size(4), _seed(SEED_IS_NOT_SET)
+    : QMainWindow(parent), _settings(Settings())
 {
     constructLayout();
 }
@@ -125,12 +124,12 @@ void MainWindow::setButtonIcon(QPushButton * button, const QString & resourcePat
 
 void MainWindow::constructLayout()
 {
-    _locks = new LocksArray(_matrix_size, _dark_theme);
-    _locks_logic = new LocksLogic(_matrix_size);
-    _locks_model = new LocksModel(_matrix_size);
-    _rockers = new RockersMatrix(_matrix_size, _dark_theme);
-    _rockers_model = new RockersModel(_matrix_size);
-    _rockers_logic = new RockersLogic(_matrix_size);
+    _locks = new LocksArray(_settings);
+    _locks_logic = new LocksLogic(_settings);
+    _locks_model = new LocksModel(_settings);
+    _rockers_model = new RockersModel(_settings);
+    _rockers = new RockersMatrix(*_rockers_model, _settings);
+    _rockers_logic = new RockersLogic(_settings);
 
     _btn_full_undo = new QPushButton("", this);
     _btn_undo = new QPushButton("", this);
@@ -183,14 +182,14 @@ MainWindow::~MainWindow()
 void MainWindow::showEvent(QShowEvent *)
 {
     _win_logic->block();
-    if (_seed == SEED_IS_NOT_SET) {
+    if (_settings.seed() == Settings::SEED_IS_NOT_SET) {
         qsrand(static_cast<quint64>(QTime::currentTime().msecsSinceStartOfDay()));
-        _seed = qrand();
+        _settings.setSeed(qrand());
     }
-    _minimum_moves = _rockers_model->shuffle(_seed);
+    _minimum_moves = _rockers_model->shuffle(_settings.seed());
     _win_logic->unblock();
     qDebug() << "This puzzle might be solved in" << _minimum_moves << "moves";
-    setWindowTitle(QString("Colobock (seed#%1)").arg(_seed));
+    setWindowTitle(QString("Colobock (seed#%1)").arg(_settings.seed()));
 }
 
 void MainWindow::winCatcher()
@@ -218,14 +217,12 @@ void MainWindow::moveCounterChanged(int value)
 
 void MainWindow::configBtnClicked()
 {
-    ConfigDialog dialog(_matrix_size, _seed, _dark_theme);
+    ConfigDialog dialog(_settings);
     dialog.setModal(true);
     int dialogResult = dialog.exec();
     if (dialogResult == QDialog::Accepted)
     {
-        _matrix_size = dialog.matrixSize();
-        _seed = dialog.seed();
-        _dark_theme = dialog.darkTheme();
+        _settings = dialog.settings();
         restartLayout();
     }
 }
