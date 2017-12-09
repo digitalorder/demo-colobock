@@ -40,6 +40,7 @@ class MainWindow : public QMainWindow
     void deleteLayout();
     void constructLayout();
     void showEvent(QShowEvent *);
+    void closeEvent(QCloseEvent *event);
     void setButtonIcon(QPushButton *button, const QString &resourcePath, const QString &inactiveResourcePath = nullptr);
 
 public:

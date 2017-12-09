@@ -5,8 +5,13 @@
 #include <QSpacerItem>
 #include <QMessageBox>
 #include <QTime>
+#include <QFile>
+#include <QDataStream>
 #include "configdialog.h"
 #include "infodialog.h"
+
+const QString settingsFileName = QString("settings.bin");
+const QDataStream::Version settingsFileVersion = QDataStream::Version::Qt_5_0;
 
 void MainWindow::restartLayout()
 {
@@ -91,6 +96,18 @@ void MainWindow::drawWidgets()
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), _settings(Settings())
 {
+    QFile file(settingsFileName);
+
+    if (!file.open(QIODevice::ReadOnly))
+    {
+        qDebug() << "Unable to open file containing game settings. Using defaults for now";
+    }
+    else
+    {
+        QDataStream in(&file);
+        in.setVersion(settingsFileVersion);
+        in >> _settings;
+    }
     constructLayout();
 }
 
@@ -163,6 +180,19 @@ void MainWindow::constructLayout()
     connect(_logger, &Logger::moveCounterChanged, this, &MainWindow::moveCounterChanged);
     connect(_btn_config, &QPushButton::clicked, this, &MainWindow::configBtnClicked);
     connect(_btn_info, &QPushButton::clicked, this, &MainWindow::infoBtnClicked);
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    (void)event;
+
+    QFile file(settingsFileName);
+    if (!file.open(QIODevice::WriteOnly)) {
+        return;
+    }
+    QDataStream out(&file);
+    out.setVersion(settingsFileVersion);
+    out << _settings;
 }
 
 void MainWindow::showEvent(QShowEvent *)

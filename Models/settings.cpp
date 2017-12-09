@@ -20,3 +20,18 @@ void Settings::setSeed(int seed)
         _seed = seed;
     }
 }
+
+QDataStream& operator<<(QDataStream &out, const Settings &settings)
+{
+    out << settings.matrixSize() << settings.seed() << settings.darkTheme();
+    return out;
+}
+
+QDataStream &operator>>(QDataStream &in, Settings &settings)
+{
+    int matrixSize, seed;
+    bool darkTheme;
+    in >> matrixSize >> seed >> darkTheme;
+    settings = Settings(matrixSize, seed, darkTheme);
+    return in;
+}

@@ -2,6 +2,7 @@
 #define SETTINGS_H
 
 #include <QString>
+#include <QDataStream>
 
 class Settings
 {
@@ -14,6 +15,7 @@ public:
     };
 
     Settings(): _matrix_size(4), _seed(SEED_IS_NOT_SET), _dark_theme(false) {}
+    Settings(int matrixSize, int seed, bool darkTheme): _matrix_size(matrixSize), _seed(seed), _dark_theme(darkTheme) { }
 
     void setMatrixSize(int matrixSize);
     void setSeed(int seed);
@@ -25,5 +27,8 @@ public:
 
     QString resourceFolder() const { return _dark_theme ? QString(":/images/resources/Dark/") : QString(":/images/resources/Light/"); }
 };
+
+QDataStream &operator<<(QDataStream &out, const Settings &settings);
+QDataStream &operator>>(QDataStream &in, Settings &settings);
 
 #endif // SETTINGS_H
