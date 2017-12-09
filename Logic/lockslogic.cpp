@@ -1,10 +1,5 @@
 #include "lockslogic.h"
 
-LocksLogic::LocksLogic(const Settings &settings) : _size(settings.matrixSize())
-{
-
-}
-
 void LocksLogic::newRockersStateSlot(const RockersModel &state)
 {
     qDebug() << "LocksLogic: received new model:" << state;

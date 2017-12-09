@@ -94,19 +94,9 @@ MainWindow::MainWindow(QWidget *parent)
     constructLayout();
 }
 
-void MainWindow::deleteParentless()
-{
-    // following objects doesn't have a representation and therefore
-    // should be deleted manually
-    delete _rockers_logic;
-    delete _locks_logic;
-    delete _win_logic;
-    delete _logger;
-}
 void MainWindow::deleteLayout()
 {
     delete _central_widget;
-    deleteParentless();
 }
 
 void MainWindow::setButtonIcon(QPushButton * button, const QString & resourcePath, const QString & inactiveResourcePath)
@@ -124,12 +114,12 @@ void MainWindow::setButtonIcon(QPushButton * button, const QString & resourcePat
 
 void MainWindow::constructLayout()
 {
+    _locks_model = new LocksModel(_settings, this);
     _locks = new LocksArray(_settings);
-    _locks_logic = new LocksLogic(_settings);
-    _locks_model = new LocksModel(_settings);
-    _rockers_model = new RockersModel(_settings);
+    _locks_logic = new LocksLogic(_settings, this);
+    _rockers_model = new RockersModel(_settings, this);
     _rockers = new RockersMatrix(*_rockers_model, _settings);
-    _rockers_logic = new RockersLogic(_settings);
+    _rockers_logic = new RockersLogic(_settings, this);
 
     _btn_full_undo = new QPushButton("", this);
     _btn_undo = new QPushButton("", this);
@@ -140,8 +130,8 @@ void MainWindow::constructLayout()
     _lbl_move_counter = new QLabel(QString("Moves: 0   "), this);
     _central_widget = new QWidget(this);
 
-    _win_logic = new WinLogic();
-    _logger = new Logger();
+    _win_logic = new WinLogic(this);
+    _logger = new Logger(this);
 
     drawWidgets();
 
@@ -172,11 +162,6 @@ void MainWindow::constructLayout()
     connect(_logger, &Logger::moveCounterChanged, this, &MainWindow::moveCounterChanged);
     connect(_btn_config, &QPushButton::clicked, this, &MainWindow::configBtnClicked);
     connect(_btn_info, &QPushButton::clicked, this, &MainWindow::infoBtnClicked);
-}
-
-MainWindow::~MainWindow()
-{
-    deleteParentless();
 }
 
 void MainWindow::showEvent(QShowEvent *)

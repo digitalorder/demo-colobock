@@ -14,7 +14,7 @@ class LocksModel: public QObject, public Blockable
     bool _is_blocked;
 
 public:
-    LocksModel(const Settings & settings);
+    LocksModel(const Settings & settings, QObject *parent = 0);
     LocksModel(const LocksModel &obj);
     int size() const { return _storage.size(); }
     Lock::State read(int x) const;

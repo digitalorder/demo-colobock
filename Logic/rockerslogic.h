@@ -16,7 +16,7 @@ class RockersLogic : public QObject
     int do_toggling();
 
 public:
-    explicit RockersLogic(const Settings & settings);
+    explicit RockersLogic(const Settings & settings, QObject * parent = 0);
 
 signals:
     void blockControllers();

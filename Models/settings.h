@@ -13,7 +13,7 @@ public:
         SEED_IS_NOT_SET = INT32_MAX
     };
 
-    Settings(): _matrix_size(4), _seed(0), _dark_theme(false) {}
+    Settings(): _matrix_size(4), _seed(SEED_IS_NOT_SET), _dark_theme(false) {}
 
     void setMatrixSize(int matrixSize);
     void setSeed(int seed);

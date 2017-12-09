@@ -13,7 +13,7 @@ class LocksLogic : public QObject
     bool _is_blocked;
 
 public:
-    explicit LocksLogic(const Settings & settings);
+    explicit LocksLogic(const Settings & settings, QObject * parent = 0): QObject(parent), _size(settings.matrixSize()) { }
 
 signals:
     void blockControllers();

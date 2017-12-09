@@ -1,11 +1,6 @@
 #include "winlogic.h"
 #include "lock.h"
 
-WinLogic::WinLogic(): _is_blocked(false)
-{
-
-}
-
 void WinLogic::newLocksStateSlot(const LocksModel & state)
 {
     qDebug() << "WinLogic: received new model: " << state;

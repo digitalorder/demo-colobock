@@ -1,10 +1,6 @@
 #include "logger.h"
 #include <QDebug>
 
-Logger::Logger(): _move_counter(0), _is_blocked(false)
-{
-}
-
 void Logger::incMoveCounter()
 {
     _move_counter++;
@@ -64,6 +60,14 @@ void Logger::undoLastUserAction()
 {
     decMoveCounter();
     moveAction(_undo_history, _move_history);
+}
+
+void Logger::undoAllUserActions()
+{
+    while (_move_history.size())
+    {
+        undoLastUserAction();
+    }
 }
 
 void Logger::disable()

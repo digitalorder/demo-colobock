@@ -17,7 +17,7 @@ class RockersModel: public QObject, public Blockable
     bool allRockersAreHorizontal();
 
 public:
-    RockersModel(const Settings &settings);
+    RockersModel(const Settings &settings, QObject * parent = 0);
     RockersModel(const RockersModel &obj);
     Rocker::State read(const Coord &coord) const;
     int size() const { return _size; }

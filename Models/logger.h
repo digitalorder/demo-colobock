@@ -36,7 +36,7 @@ class Logger : public QObject, public Blockable
     void moveAction(QVector<UserAction> &to, QVector<UserAction> &from);
 
 public:
-    explicit Logger();
+    explicit Logger(QObject * parent = 0): QObject(parent), _move_counter(0), _is_blocked(false) { }
     virtual bool isBlocked() { return _is_blocked; }
     virtual void block() { _is_blocked = true; emitNoAvailabilityNotifications(); }
     virtual void unblock() { _is_blocked = false; emitAvailabilityNotifications(); }
@@ -51,6 +51,7 @@ public slots:
     void newUserAction(const Coord& coord, ActionSource source);
     void redoLastUserAction();
     void undoLastUserAction();
+    void undoAllUserActions();
     void disable();
     void enable();
 };

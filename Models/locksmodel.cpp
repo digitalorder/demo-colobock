@@ -1,6 +1,6 @@
 #include "locksmodel.h"
 
-LocksModel::LocksModel(const Settings &settings)
+LocksModel::LocksModel(const Settings &settings, QObject *parent): QObject(parent)
 {
     _storage.resize(settings.matrixSize());
 }
