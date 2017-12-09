@@ -60,7 +60,8 @@ HEADERS  += \
     Logic/rockerslogic.h \
     Logic/lockslogic.h \
     Logic/winlogic.h \
-    Shared/primitivetypes.h
+    Shared/primitivetypes.h \
+    Shared/useraction.h
 
 RESOURCES += \
     resources.qrc

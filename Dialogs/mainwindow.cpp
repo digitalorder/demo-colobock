@@ -23,7 +23,7 @@ void MainWindow::restartLayout()
 void MainWindow::drawWidgets()
 {
     QHBoxLayout * loButtons = new QHBoxLayout();
-//    loButtons->addWidget(_btn_full_undo);
+    loButtons->addWidget(_btn_full_undo);
     loButtons->addWidget(_btn_undo);
     loButtons->addWidget(_btn_redo);
     loButtons->addSpacerItem(new QSpacerItem(2, 0, QSizePolicy::Expanding));
@@ -74,7 +74,7 @@ void MainWindow::drawWidgets()
     _central_widget->setAutoFillBackground(true);
     _central_widget->setPalette(pal);
 
-//    setButtonIcon(_btn_full_undo, QString(resourceFolder + "Full_Undo_Active.png"), QString(resourceFolder + "Full_Undo_Inactive.png"));
+    setButtonIcon(_btn_full_undo, _settings.resourceFolder() + "Full_Undo_Active.png", _settings.resourceFolder() + "Full_Undo_Inactive.png");
     setButtonIcon(_btn_undo, _settings.resourceFolder() + "Undo_Active.png", _settings.resourceFolder() + "Undo_Inactive.png");
     setButtonIcon(_btn_redo, _settings.resourceFolder() + "Redo_Active.png", _settings.resourceFolder() + "Redo_Inactive.png");
 //    setButtonIcon(_btn_highest_score, QString(resourceFolder + "Top.png"));
@@ -153,6 +153,7 @@ void MainWindow::constructLayout()
     connect(_locks_model, &LocksModel::locksStateChangedSignal, _locks, &LocksArray::updateLocksStates);
     connect(_locks_model, &LocksModel::locksStateChangedSignal, _win_logic, &WinLogic::newLocksStateSlot);
     connect(_win_logic, &WinLogic::win, this, &MainWindow::winCatcher);
+    connect(_btn_full_undo, &QPushButton::clicked, _logger, &Logger::undoAllUserActions);
     connect(_btn_undo, &QPushButton::clicked, _logger, &Logger::undoLastUserAction);
     connect(_btn_redo, &QPushButton::clicked, _logger, &Logger::redoLastUserAction);
     connect(_logger, &Logger::revertAction, _rockers_model, &RockersModel::rockerToggled);

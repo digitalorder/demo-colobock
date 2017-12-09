@@ -4,45 +4,33 @@
 #include <QObject>
 #include <QVector>
 #include <iostream>
+#include "useraction.h"
 #include "primitivetypes.h"
-
-class UserAction
-{
-    Coord _coord;
-
-public:
-    UserAction(): _coord(Coord()) {}
-    UserAction(const Coord &coord): _coord(coord) {}
-    UserAction(const UserAction& a) = default;
-    UserAction(UserAction&& a) = default;
-    UserAction& operator=(UserAction&& a) = default;
-    UserAction& operator=(const UserAction& a) = default;
-
-    Coord coord() const { return _coord; }
-};
 
 class Logger : public QObject, public Blockable
 {
     Q_OBJECT
-    QVector<UserAction> _move_history;
-    QVector<UserAction> _undo_history;
+    UserActions _move_history;
+    UserActions _undo_history;
     int _move_counter;
     bool _is_blocked;
+    bool _full_undo_in_progress;
     void incMoveCounter();
     void decMoveCounter();
     void resetMoveCounter();
     void emitAvailabilityNotifications();
     void emitNoAvailabilityNotifications();
-    void moveAction(QVector<UserAction> &to, QVector<UserAction> &from);
+    void moveAction(UserActions &to, UserActions &from);
 
 public:
-    explicit Logger(QObject * parent = 0): QObject(parent), _move_counter(0), _is_blocked(false) { }
+    explicit Logger(QObject * parent = 0): QObject(parent), _move_counter(0), _is_blocked(false), _full_undo_in_progress(false) { }
     virtual bool isBlocked() { return _is_blocked; }
     virtual void block() { _is_blocked = true; emitNoAvailabilityNotifications(); }
-    virtual void unblock() { _is_blocked = false; emitAvailabilityNotifications(); }
+    virtual void unblock();
 
 signals:
     void revertAction(const Coord &coord, ActionSource source);
+    void revertActions(const UserActions &actions);
     void undoAvailablityChanged(bool enabled);
     void redoAvailablityChanged(bool enabled);
     void moveCounterChanged(int value);

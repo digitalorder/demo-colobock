@@ -42,7 +42,7 @@ void Logger::newUserAction(const Coord &coord, ActionSource source)
     }
 }
 
-void Logger::moveAction(QVector<UserAction> &to, QVector<UserAction> &from)
+void Logger::moveAction(UserActions &to, UserActions &from)
 {
     UserAction a = from.takeLast();
     to.append(a);
@@ -62,12 +62,24 @@ void Logger::undoLastUserAction()
     moveAction(_undo_history, _move_history);
 }
 
-void Logger::undoAllUserActions()
+void Logger::unblock()
 {
-    while (_move_history.size())
+    if (_full_undo_in_progress && _move_counter)
     {
         undoLastUserAction();
     }
+    else
+    {
+        _full_undo_in_progress = false;
+        _is_blocked = false;
+        emitAvailabilityNotifications();
+    }
+}
+
+void Logger::undoAllUserActions()
+{
+    _full_undo_in_progress = true;
+    undoLastUserAction();
 }
 
 void Logger::disable()
